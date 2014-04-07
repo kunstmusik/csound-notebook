@@ -1,4 +1,6 @@
 CsoundNotebook::Application.routes.draw do
+  resources :notebooks
+
  # get "user_sessions/new"
  # get "user_sessions/create"
  # get "user_sessions/destroy"
