@@ -1,8 +1,17 @@
 class UsersController < ApplicationController
 
-  skip_before_filter :require_login, only: [:index, :new, :create]
+  skip_before_filter :require_login, only: [:index, :new, :create, :activate]
 
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+
+  def activate
+    if (@user = User.load_from_activation_token(params[:id]))
+      @user.activate!
+      redirect_to(login_path, :notice => 'User was successfully activated.')
+    else
+      not_authenticated
+    end
+  end
 
   # GET /users
   # GET /users.json
@@ -73,6 +82,6 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
 #      params.require(:user).permit(:email, :crypted_password, :salt)
-      params.require(:user).permit(:email, :password, :password_confirmation)
+      params.require(:user).permit(:email, :password, :password_confirmation, :username)
     end
 end

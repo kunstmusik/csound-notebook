@@ -3,9 +3,16 @@ CsoundNotebook::Application.routes.draw do
  # get "user_sessions/create"
  # get "user_sessions/destroy"
 
-  root :to => 'users#index'
+  root :to => 'pages#index'
+  get :about, to: 'pages#about'
+  get :index, to: 'pages#index'
   resources :user_sessions
-  resources :users
+  resources :users 
+  resources :users do
+    member do
+      get :activate
+    end
+  end
 
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
