@@ -18,6 +18,8 @@
       <ul class="nav navbar-nav">
         <li><a href="about.html">About</a></li>
         <li><a href="notebook.html">My Notebook</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
     <% if current_user %>
       <li><%= link_to "Edit Profile", edit_user_path(current_user.id) %></li>
       <li><%= link_to "Logout", :logout, method: :post %></li>
