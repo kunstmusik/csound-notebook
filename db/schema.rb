@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407203627) do
+ActiveRecord::Schema.define(version: 20140407210007) do
 
   create_table "notebooks", force: true do |t|
     t.string   "name"
@@ -21,6 +21,18 @@ ActiveRecord::Schema.define(version: 20140407203627) do
   end
 
   add_index "notebooks", ["user_id"], name: "index_notebooks_on_user_id"
+
+  create_table "notes", force: true do |t|
+    t.string   "title"
+    t.text     "orc"
+    t.text     "sco"
+    t.integer  "notebook_id"
+    t.boolean  "public"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "notes", ["notebook_id"], name: "index_notes_on_notebook_id"
 
   create_table "users", force: true do |t|
     t.string   "email",                        null: false

@@ -11,4 +11,7 @@ class PagesController < ApplicationController
 
   end
 
+  def notebook 
+
+  end
 end
