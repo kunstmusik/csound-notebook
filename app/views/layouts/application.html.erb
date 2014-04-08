@@ -15,8 +15,8 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="about.html">About</a></li>
-        <li><a href="notebook.html">My Notebook</a></li>
+        <li><%= link_to "About", :about %></li>
+        <li><%= link_to "My Notebook", :controller => :pages, action: :notebook %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
     <% if current_user %>
