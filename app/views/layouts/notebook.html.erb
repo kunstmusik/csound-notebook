@@ -3,19 +3,22 @@
 <head>
   <title>CsoundNotebook</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <script type="text/javascript" src="csound.js"></script>
 
  <script type="text/javascript">
+
  // called by csound.js
  function moduleDidLoad() {
 
  }
  function attachListeners() { 
-  document.getElementById('playButton').
-       addEventListener('click', togglePlay);
-   document.getElementById('files').
-      addEventListener('change', handleFileSelect, false);
+  <%#document.getElementById('playButton').%>
+  <%#     addEventListener('click', togglePlay);%>
+  <%# document.getElementById('files').%>
+  <%#    addEventListener('change', handleFileSelect, false);%>
  }
 
  var count = 0;
@@ -71,7 +74,7 @@ function handleFileSelect(evt) {
 
   <%= csrf_meta_tags %>
 </head>
-<body role="document">
+<body ng-app role="document">
 
 <div class="navbar navbar-inverse" role="navigation">
   <div class="container">
@@ -100,9 +103,7 @@ function handleFileSelect(evt) {
   <p id="alert"><%= flash[:alert] %></p>
 </div>
 
-<div class="container">
 <%= yield %>
-</div>
 
 </body>
 </html>

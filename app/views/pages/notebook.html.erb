@@ -1,21 +1,47 @@
 
 
+<div role="main" class="container main-body">
+  <div class="row">
+    <div ng-controller="NotebookController" class="col-md-2">
+      <h4>Notebooks</h4>
+      <button>Add Notebook</button>
+        <ul>
+          <li ng-repeat="notebook in notebooks" ng-mousedown="alert('test');">
+          {{notebook.name}}
+          </li>
+        </ul>
 
-<div class="btn-toolbar">
-  <button type="button" class="btn btn-default">Play</button>
-  <button type="button" class="btn btn-default">Stop</button>
-  <button type="button" class="btn btn-default">Evaluate</button>
+    </div>
+
+    <div class="col-md-10">
+
+      <div class="btn-toolbar">
+        <button type="button" class="btn btn-default">Play</button>
+        <button type="button" class="btn btn-default">Stop</button>
+        <button type="button" class="btn btn-default">Evaluate</button>
+      </div>
+
+
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:showTab(0);">Orc</a></li>
+        <li><a href="javascript:showTab(1);">Sco</a></li>
+        <li><a href="javascript:showTab(2);">Console</a></li>
+      </ul>
+
+<textarea class="" cols="55" rows="13" id="orc_code"
+  value=""></textarea>
+<textarea class="ng-hide" cols="55" rows="13" id="sco_code"
+  value=""></textarea>
+<textarea class="ng-hide console" cols="55" rows="13" id="console"
+  value="">Csound: not loaded</textarea>
+
+    </div>
+  </div>
+
 </div>
 
 
-<ul class="nav nav-tabs">
-  <li class="active"><a href="#">Orc</a></li>
-  <li><a href="#">Sco</a></li>
-  <li><a href="#">Console</a></li>
-</ul>
 
-  <textarea class="console" cols="55" rows="13" id="console"
-  value="">Csound: not loaded</textarea>
-  <!--pNaCl csound module-->
-  <div id="engine"></div>
+<!--pNaCl csound module-->
+<div id="engine"></div>
 
