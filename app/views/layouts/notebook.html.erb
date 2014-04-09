@@ -7,11 +7,17 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "notebook", "data-turbolinks-track" => true %>
+
+  <%= javascript_include_tag "notebook/services", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "notebook/filters", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "notebook/controllers", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "notebook/app", "data-turbolinks-track" => true %>
+
   <%= javascript_include_tag "jquery-textrange", "data-turbolinks-track" => true %>
   <script type="text/javascript" src="csound.js"></script>
   <%= csrf_meta_tags %>
 </head>
-<body ng-app role="document">
+<body ng-app="notebookApp" role="document">
 
 <div class="navbar navbar-inverse" role="navigation">
   <div class="container">

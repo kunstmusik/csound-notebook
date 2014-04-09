@@ -2,18 +2,18 @@
 
 <div role="main" class="container main-body">
   <div class="row">
-    <div ng-controller="NotebookController" class="col-md-2">
+    <div ng-controller="NotebooksController" class="col-md-2">
       <h4>Notebooks</h4>
       <button>Add Notebook</button>
-        <ul>
-          <li ng-repeat="notebook in notebooks" ng-mousedown="alert('test');">
+          <div ng-repeat="notebook in notebooks" ng-mousedown="alert('test');">
           {{notebook.name}}
-          </li>
-        </ul>
+          </div>
 
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-10" ng-controller="NotesController">
+
+      Title: <input ng-model="note.title"/>
 
       <div class="btn-toolbar">
         <button id="playButton" type="button" class="btn btn-default">Play</button>
@@ -28,21 +28,12 @@
         <li id="editorTab3"><a href="javascript:showTab(3);">Help</a></li>
       </ul>
 
-<textarea class="ng-show" cols="55" rows="13" id="orc_code"
-  value="">sr=44100
-ksmps=32
-nchnls=2
-0dbfs=1
-
-instr 1
-aout vco2 .5, 440
-aout moogladder aout, 2000, .3
-outs aout, aout
-endin</textarea>
-<textarea class="ng-hide" cols="55" rows="13" id="sco_code"
-  value="">i1 0 1</textarea>
-<textarea class="ng-hide console" cols="55" rows="13" id="console"
-  value="">Csound: not loaded</textarea>
+<textarea class="ng-show" cols="80" rows="20" id="orc_code"
+  style="width:100%" ng-model="note.orc" ></textarea>
+<textarea class="ng-hide" cols="80" rows="20" style="width:100%" 
+  ng-model="note.sco" id="sco_code"></textarea>
+<textarea class="ng-hide console" cols="80" rows="20" id="console"
+  style="width:100%">Csound: not loaded</textarea>
 
 <div class="ng-hide" id="help">
   <h4>Shortcuts</h4>

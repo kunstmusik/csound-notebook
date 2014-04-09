@@ -1,20 +1,4 @@
 
-function NotebookController($scope) {
-
-  $scope.notebooks = [
-      {
-          id: 1,
-          name:'My Notebook',
-          seen:true
-      },
-      {
-        id: 2,
-        name:'Inbox',
-        seen:false
-      }
-    ];
-}
-
 
 function showTab(index) {
 
@@ -61,19 +45,19 @@ function attachListeners() {
   document.getElementById('playButton').addEventListener('click', togglePlay);
   document.getElementById('evalButton').addEventListener('click', evalCode);
 //  document.getElementById('files').addEventListener('change', handleFileSelect, false);
-  $("#orc_code").keydown(function() {
+  $("html").keydown(function() {
     if(event.shiftKey && (event.which == 10 || event.which == 13)) {
       event.preventDefault();
       evalCode();
     }
   });
 
-  $("#sco_code").keydown(function() {
-    if(event.shiftKey && (event.which == 10 || event.which == 13)) {
-      event.preventDefault();
-      evalCode();
-    }
-  });
+  //$("#sco_code").keydown(function() {
+  //  if(event.shiftKey && (event.which == 10 || event.which == 13)) {
+  //    event.preventDefault();
+  //    evalCode();
+  //  }
+  //});
 }
 
 var count = 0;

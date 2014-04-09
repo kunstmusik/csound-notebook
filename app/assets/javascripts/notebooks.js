@@ -4,7 +4,7 @@
 //
 
 
-function NotebookController($scope) {
+function NotebooksController($scope) {
 
   $scope.notebooks = [
       {
