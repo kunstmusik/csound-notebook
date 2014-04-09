@@ -16,24 +16,39 @@
     <div class="col-md-10">
 
       <div class="btn-toolbar">
-        <button type="button" class="btn btn-default">Play</button>
-        <button type="button" class="btn btn-default">Stop</button>
-        <button type="button" class="btn btn-default">Evaluate</button>
+        <button id="playButton" type="button" class="btn btn-default">Play</button>
+        <button id="evalButton" type="button" class="btn btn-default">Evaluate</button>
       </div>
 
 
       <ul class="nav nav-tabs">
-        <li class="active"><a href="javascript:showTab(0);">Orc</a></li>
-        <li><a href="javascript:showTab(1);">Sco</a></li>
-        <li><a href="javascript:showTab(2);">Console</a></li>
+        <li class="active" id="editorTab0"><a href="javascript:showTab(0);">Orc</a></li>
+        <li id="editorTab1"><a href="javascript:showTab(1);">Sco</a></li>
+        <li id="editorTab2"><a href="javascript:showTab(2);">Console</a></li>
+        <li id="editorTab3"><a href="javascript:showTab(3);">Help</a></li>
       </ul>
 
-<textarea class="" cols="55" rows="13" id="orc_code"
-  value=""></textarea>
+<textarea class="ng-show" cols="55" rows="13" id="orc_code"
+  value="">sr=44100
+ksmps=32
+nchnls=2
+0dbfs=1
+
+instr 1
+aout vco2 .5, 440
+aout moogladder aout, 2000, .3
+outs aout, aout
+endin</textarea>
 <textarea class="ng-hide" cols="55" rows="13" id="sco_code"
-  value=""></textarea>
+  value="">i1 0 1</textarea>
 <textarea class="ng-hide console" cols="55" rows="13" id="console"
   value="">Csound: not loaded</textarea>
+
+<div class="ng-hide" id="help">
+  <h4>Shortcuts</h4>
+  <ul>
+    <li>shift-enter - evaluate selection or full text area if orc or sco tab is selected</li>
+  </ul>
 
     </div>
   </div>

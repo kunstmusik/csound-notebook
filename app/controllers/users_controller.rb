@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  skip_before_filter :require_login, only: [:index, :new, :create, :activate]
+  skip_before_filter :require_login, only: [:new, :create, :activate]
 
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
