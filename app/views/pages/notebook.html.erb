@@ -30,30 +30,36 @@
         <button id="saveButton" type="button" class="btn btn-default"
           ng-click="saveNote(note)">Save</button>
         <button id="deleteButton" type="button" class="btn btn-default"
-          ng-click="deleteNote()">Delete</button>
+          ng-click="deleteNote(note)">Delete</button>
       </div>
 
-      <ul class="nav nav-tabs">
-        <li class="active" id="editorTab0"><a href="javascript:showTab(0);">Orc</a></li>
-        <li id="editorTab1"><a href="javascript:showTab(1);">Sco</a></li>
-        <li id="editorTab2"><a href="javascript:showTab(2);">Console</a></li>
-        <li id="editorTab3"><a href="javascript:showTab(3);">Help</a></li>
-      </ul>
 
-<textarea class="ng-show" cols="80" rows="20" id="orc_code"
-  style="width:100%" ng-model="note.orc" ></textarea>
-<textarea class="ng-hide" cols="80" rows="20" style="width:100%" 
-  ng-model="note.sco" id="sco_code"></textarea>
-<textarea class="ng-hide console" cols="80" rows="20" id="console"
-  style="width:100%">Csound: not loaded</textarea>
+      <tabset>
+        <tab heading="ORC" id="orc_tab">
+          <textarea cols="80" rows="20" id="orc_code"
+            style="width:100%" ng-model="note.orc" ></textarea>
+        </tab>
 
-<div class="ng-hide" id="help">
-  <h4>Shortcuts</h4>
-  <ul>
-    <li>shift-enter - evaluate selection or full text area if orc or sco tab is selected</li>
-  </ul>
+        <tab heading="SCO" id="sco_tab">
+          <textarea cols="80" rows="20" style="width:100%" 
+            ng-model="note.sco" id="sco_code"></textarea>
+        </tab>
 
-    </div>
+        <tab heading="Console">
+          <textarea class="console" cols="80" rows="20" id="console"
+            style="width:100%">Csound: not loaded</textarea>
+        </tab>
+
+        <tab heading="Help">
+          <div>
+          <h4>Shortcuts</h4>
+          <ul>
+            <li>shift-enter - evaluate selection or full text area if orc or sco tab is selected</li>
+          </ul>
+          </div>
+        </tab>
+      </tabset>
+
   </div>
 
 </div>

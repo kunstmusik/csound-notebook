@@ -6,9 +6,10 @@ var notebookApp = angular.module('notebookApp', [
   //'ngRoute',
   //'phonecatAnimations',
 
-  'notebookControllers'
+  'notebookControllers',
   //'phonecatFilters',
   //'phonecatServices'
+  'ui.bootstrap'
 ]);
 
 notebookApp.config([

@@ -1,30 +1,18 @@
 
-
-function showTab(index) {
-
-  $( "#editorTab0").attr("class", (index == 0) ? "active" : "");
-  $( "#editorTab1").attr("class", (index == 1) ? "active" : "");
-  $( "#editorTab2").attr("class", (index == 2) ? "active" : "");
-  $( "#editorTab3").attr("class", (index == 3) ? "active" : "");
-
-  $( "#orc_code").attr("class", (index == 0) ? "ng-show" : "ng-hide");
-  $( "#sco_code").attr("class", (index == 1) ? "ng-show" : "ng-hide");
-  $( "#console").attr("class", (index == 2) ? "ng-show" : "ng-hide");
-  $( "#help").attr("class", (index == 3) ? "ng-show" : "ng-hide");
-}
-
 function evalCode() {
   var orcText = $("#orc_code");
   var scoText = $("#sco_code");
+  var orcTab = $('#orc_tab');
+  var scoTab = $('#sco_tab');
 
-  if (orcText.hasClass("ng-show")) {
+  if (orcTab[0].className.search('active') >= 0) {
     var selection = orcText.textrange('get');
     if(selection.length > 0) {
       csound.CompileOrc( selection.text );
     } else {
       csound.CompileOrc( orcText.val() + "\n");
     }
-  } else if ( scoText.hasClass("ng-show")) {
+  } else if (scoTab[0].className.search('active') >= 0) {
     var selection = scoText.textrange('get');
     if(selection.length > 0) {
       csound.ReadScore( selection.text );

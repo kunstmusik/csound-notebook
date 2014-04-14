@@ -85,18 +85,23 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       this.notes = [];
     }
 
-    $scope.selectNotebook = function(notebook) {
-      if($scope.currentNotebook == notebook) {
-    //    alert('notebook already selected');
-        return;
-      }
-      $scope.currentNotebook = notebook;
+    $scope.reloadNotebook = function(notebook) {
+      $scope.note = null;
       $http.get('/notes.json?callback=JSON_CALLBACK&notebook_id=' + notebook.id )
         .success(function(data, status, headers, config) {
           $scope.notes = data;
         }).error(function(data, status, headers, config) {
           alert("Oh no!  Couldn't load my notebooks... :( ");
         });
+    }
+
+    $scope.selectNotebook = function(notebook) {
+      if($scope.currentNotebook == notebook) {
+    //    alert('notebook already selected');
+        return;
+      }
+      $scope.currentNotebook = notebook;
+      $scope.reloadNotebook(notebook);
     };
 
     $scope.selectNotebook(allNotesNotebook);
@@ -144,8 +149,21 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       }
     };
 
-    $scope.deleteNote = function() {
-      alert("Deleting note" + this.note.id); 
+    $scope.deleteNote = function(note) {
+      if(confirm("Please confirm deleting this note.")) {
+        console.log(note);
+        
+        $http.delete('/notes/' + note.id + '.json')
+          .success(function(data, status, headers, config) {
+            if($scope.note == note) {
+              $scope.note = null;
+              $scope.reloadNotebook($scope.currentNotebook);
+            }
+            //note.id = note.id; // update note.id
+        }).error(function(data, status, headers, config) {
+           alert("Oh no!  Couldn't load my notebooks... :( ");
+        });
+      }
     };
 
   }]);
