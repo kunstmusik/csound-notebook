@@ -4,7 +4,7 @@ class NotebooksController < ApplicationController
   # GET /notebooks
   # GET /notebooks.json
   def index
-    @notebooks = Notebook.all
+    @notebooks = Notebook.where(:user_id => current_user.id).to_a
   end
 
   # GET /notebooks/1
@@ -25,6 +25,7 @@ class NotebooksController < ApplicationController
   # POST /notebooks.json
   def create
     @notebook = Notebook.new(notebook_params)
+    @notebook.user_id = current_user.id
 
     respond_to do |format|
       if @notebook.save

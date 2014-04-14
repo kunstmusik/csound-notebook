@@ -1,23 +1,36 @@
 
 
-<div role="main" class="container main-body">
+<div role="main" class="container main-body" ng-controller="NotebooksController">
   <div class="row">
-    <div ng-controller="NotebooksController" class="col-md-2">
-      <h4>Notebooks</h4>
-      <button>Add Notebook</button>
-          <div ng-repeat="notebook in notebooks" ng-mousedown="alert('test');">
+    <div  class="col-md-2">
+      <h4>Notebooks <button ng-click="addNotebook()">+</button></h4>
+      
+      <div ng-repeat="notebook in notebooks" ng-click="selectNotebook(notebook);"
+        ng-class="getNotebookClass(notebook)">
           {{notebook.name}}
+      </div>
+
+    </div>
+
+    <div class="col-md-2">
+      <h4>{{currentNotebook.name}} <button ng-click="newNote(currentNotebook.id)">+</button></h4>
+                <div ng-repeat="note in notes" ng-click="selectNote(note);">
+          {{note.title}}
           </div>
 
     </div>
 
-    <div class="col-md-10" ng-controller="NotesController">
+    <div class="col-md-8">
 
       Title: <input ng-model="note.title"/>
 
       <div class="btn-toolbar">
         <button id="playButton" type="button" class="btn btn-default">Play</button>
         <button id="evalButton" type="button" class="btn btn-default">Evaluate</button>
+        <button id="saveButton" type="button" class="btn btn-default"
+          ng-click="saveNote()">Save</button>
+        <button id="deleteButton" type="button" class="btn btn-default"
+          ng-click="deleteNote()">Delete</button>
       </div>
 
 
