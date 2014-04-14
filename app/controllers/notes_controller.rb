@@ -4,7 +4,12 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.all
+    if(params[:notebook_id] == nil or params[:notebook_id] == '0')
+      @notes = Note.where(:user_id => current_user.id).to_a 
+    else
+      @notes = Note.where(:user_id => current_user.id, 
+                          :notebook_id => params[:notebook_id]).to_a 
+    end
   end
 
   # GET /notes/1
@@ -25,6 +30,7 @@ class NotesController < ApplicationController
   # POST /notes.json
   def create
     @note = Note.new(note_params)
+    @note.user_id = current_user.id
 
     respond_to do |format|
       if @note.save

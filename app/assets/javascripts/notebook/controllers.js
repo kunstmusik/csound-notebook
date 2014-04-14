@@ -46,7 +46,7 @@ var allNotesNotebook = { id: 0, name: 'All Notes' };
 
 notebookControllers.controller('NotebooksController', ['$scope','$http', 
   function($scope, $http) {
-    $scope.currentNotebook = allNotesNotebook;
+//    $scope.currentNotebook = allNotesNotebook;
     $scope.note = null;
     $scope.notes = [];
     $scope.notebooks = notebooks;
@@ -91,7 +91,7 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
         return;
       }
       $scope.currentNotebook = notebook;
-      $http.get('/notes.json?callback=JSON_CALLBACK', { id: notebook.id} )
+      $http.get('/notes.json?callback=JSON_CALLBACK&notebook_id=' + notebook.id )
         .success(function(data, status, headers, config) {
           $scope.notes = data;
         }).error(function(data, status, headers, config) {
@@ -124,8 +124,24 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       $scope.note = note;
     }
 
-    $scope.saveNote = function() {
-      alert("Saving note" + this.note.id); 
+    $scope.saveNote = function(note) {
+      console.log("Saving note " + note.id); 
+     
+      if(note.id <= 0) {
+        $http.post('/notes.json?callback=JSON_CALLBACK', note )
+          .success(function(data, status, headers, config) {
+            note.id = note.id; // update note.id
+          }).error(function(data, status, headers, config) {
+            alert("Oh no!  Couldn't load my notebooks... :( ");
+          });
+      } else {
+        $http.put('/notes/' + note.id + '.json', note )
+          .success(function(data, status, headers, config) {
+            //note.id = note.id; // update note.id
+        }).error(function(data, status, headers, config) {
+           alert("Oh no!  Couldn't load my notebooks... :( ");
+        });
+      }
     };
 
     $scope.deleteNote = function() {
