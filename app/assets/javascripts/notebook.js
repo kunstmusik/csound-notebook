@@ -1,3 +1,11 @@
+function hideMenuButton(listItem) {
+  console.log(listItem);
+}
+
+function showMenuButton(listItem) {
+  alert('test');
+  console.log(listItem);
+}
 
 function evalCode() {
   var orcText = $("#orc_code");

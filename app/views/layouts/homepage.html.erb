@@ -3,23 +3,10 @@
 <head>
   <title>CsoundNotebook</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-  <%= stylesheet_link_tag    "notebook", media: "all", "data-turbolinks-track" => true %>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
-  <%= javascript_include_tag "ui-bootstrap-tpls-0.10.0.min", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "notebook", "data-turbolinks-track" => true %>
-
-  <%= javascript_include_tag "notebook/services", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "notebook/filters", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "notebook/controllers", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "notebook/app", "data-turbolinks-track" => true %>
-
-  <%= javascript_include_tag "jquery-textrange", "data-turbolinks-track" => true %>
-  <script type="text/javascript" src="csound.js"></script>
   <%= csrf_meta_tags %>
 </head>
-<body ng-app="notebookApp" role="document">
+<body role="document">
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -42,6 +29,10 @@
       </ul>
     </div><!--/.nav-collapse -->
   </div>
+</div>
+<div>
+  <p id="notice"><%= flash[:notice] %></p>
+  <p id="alert"><%= flash[:alert] %></p>
 </div>
 
 <%= yield %>

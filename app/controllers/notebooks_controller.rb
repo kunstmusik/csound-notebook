@@ -4,7 +4,12 @@ class NotebooksController < ApplicationController
   # GET /notebooks
   # GET /notebooks.json
   def index
-    @notebooks = Notebook.where(:user_id => current_user.id).to_a
+    respond_to do |format|
+      format.html { redirect_to :index }
+      format.json {
+        @notebooks = Notebook.where(:user_id => current_user.id).to_a
+      }
+    end
   end
 
   # GET /notebooks/1

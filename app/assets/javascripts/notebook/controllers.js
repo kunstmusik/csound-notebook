@@ -8,36 +8,12 @@ var notebookControllers = angular.module('notebookControllers', []);
 
 var templateNote = {
       id: 100,
-      orc: "sr=44100\nksmps=32\nnchnls=2\n0dbfs=1\n\ninstr 1\nipch = cps2pch(p4,12)\naout vco2 .5, ipch\naout moogladder aout, 2000, .3\nouts aout, aout\nendin",
+      orc: "sr=44100\nksmps=32\nnchnls=2\n0dbfs=1\n\ninstr 1\nipch = cps2pch(p4,12)\niamp = ampdbfs(p5)\naenv linsegr 0, 0.01, 1, 0.01, .9, .3, 0\naout vco2 iamp, ipch\naout = aout * aenv\naout moogladder aout, 2000, .3\nouts aout, aout\nendin",
   
-      sco: "i1 0 1 8.00\ni1 0 1 8.04\ni1 0 1 8.07",
+      sco: "i1 0 1 8.00 -12\ni1 0 1 8.04 -12\ni1 0 1 8.07 -12",
       title: "My Note"
 };
 
-//notebookControllers.controller('NotesController', ['$scope',
-//  function($scope) {
-
-//    $scope.newNote = function() {
-//      var note = {};
-//      note.id = 0;
-//      note.orc = templateNote.orc;
-//      note.sco = templateNote.sco;
-//      note.title = templateNote.title;
-//      $scope.note = note;
-//    }
-
-//    $scope.saveNote = function() {
-//      alert("Saving note" + this.note.id); 
-//    };
-
-//    $scope.deleteNote = function() {
-//      alert("Deleting note" + this.note.id); 
-//    };
-
-
-//    $scope.newNote();
-
-//  }]);
 
 
 /* NOTEBOOK CONTROLLER */
@@ -46,7 +22,6 @@ var allNotesNotebook = { id: 0, name: 'All Notes' };
 
 notebookControllers.controller('NotebooksController', ['$scope','$http', 
   function($scope, $http) {
-//    $scope.currentNotebook = allNotesNotebook;
     $scope.note = null;
     $scope.notes = [];
     $scope.notebooks = notebooks;
@@ -77,6 +52,27 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       }
     };
 
+    $scope.deleteNotebook = function(notebook) {
+
+      if(notebook.id <= 0) { return };
+
+      if(confirm("Please confirm deleting notebook \"" + notebook.name + "\".")) {
+        console.log(notebook);
+        
+        $http.delete('/notebooks/' + notebook.id + '.json')
+          .success(function(data, status, headers, config) {
+            $scope.reloadNotebooks();
+
+            if($scope.currentNotebook.id == notebook.id) {
+              $scope.selectNotebook(allNotesNotebook);
+            }
+            //note.id = note.id; // update note.id
+        }).error(function(data, status, headers, config) {
+           alert("Oh no!  Couldn't delete my notebook... :( ");
+        });
+      }
+    }
+
     $scope.editNoteBookTitle = function() {
       alert("editing notebook title not yet implemented");
     }
@@ -97,7 +93,6 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
 
     $scope.selectNotebook = function(notebook) {
       if($scope.currentNotebook == notebook) {
-    //    alert('notebook already selected');
         return;
       }
       $scope.currentNotebook = notebook;
@@ -167,19 +162,5 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
     };
 
   }]);
-
-
-
-//notebookControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
-//  function($scope, $routeParams, Phone) {
-//    $scope.phone = Phone.get({phoneId: $routeParams.phoneId}, function(phone) {
-//      $scope.mainImageUrl = phone.images[0];
-//    });
-
-//    $scope.setImage = function(imageUrl) {
-//      $scope.mainImageUrl = imageUrl;
-//    }
-//  }]);
-
 
 

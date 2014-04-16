@@ -1,68 +1,85 @@
+<div class="wrapper" ng-controller="NotebooksController">
 
+  <div id="sidebar-wrapper" class="col-md-2">
 
-<div role="main" class="container main-body" ng-controller="NotebooksController">
-  <div class="row">
-    <div  class="col-md-2">
-      <h4>Notebooks <button ng-click="addNotebook()">+</button></h4>
-      
-      <div ng-repeat="notebook in notebooks" ng-click="selectNotebook(notebook);"
-        ng-class="getNotebookClass(notebook)">
-          {{notebook.name}}
-      </div>
+    <div class="sidebar-header">
+      <h4>Notebooks</h4> 
+      <button ng-click="addNotebook()" class="float-button">+</button></h4>
+  </div>
 
+    <div class="sidebar">
+      <ul class="nav list-group">
+        <li ng-repeat="notebook in notebooks" 
+        >
+        <a class="list-group-item" ng-click="selectNotebook(notebook);"
+          ng-mouseenter="showMenuButton('test');"
+          ng-mouseleave="hideMenuButton(this);"
+          >
+          <i class="icon-home icon-1x"></i>{{notebook.name}}</a>
+        <button ng-show="notebook.id > 0" ng-click="deleteNotebook(notebook)" class="float-button" >-</button></h4>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="sidebar-wrapper2" class="col-md-2">
+    <div class="sidebar-header">
+      <h4>{{currentNotebook.name}}</h4>
+      <button ng-click="newNote(currentNotebook.id)" class="float-button">+</button></h4>
+  </div>
+
+    <div class="sidebar">
+      <ul class="nav list-group">
+        <li ng-repeat="note in notes">
+        <a class="list-group-item" ng-click="selectNote(note);">
+          <i class="icon-home icon-1x"></i>{{note.title}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-md-8 pull-right" ng-show="note != null">
+    Title: <input ng-model="note.title"/>
+
+    <div class="btn-toolbar">
+      <button id="playButton" type="button" class="btn btn-default">Play</button>
+      <button id="evalButton" type="button" class="btn btn-default">Evaluate</button>
+      <button id="saveButton" type="button" class="btn btn-default"
+        ng-click="saveNote(note)">Save</button>
+      <button id="deleteButton" type="button" class="btn btn-default"
+        ng-click="deleteNote(note)">Delete</button>
     </div>
 
-    <div class="col-md-2">
-      <h4>{{currentNotebook.name}} <button ng-click="newNote(currentNotebook.id)">+</button></h4>
-                <div ng-repeat="note in notes" ng-click="selectNote(note);">
-          {{note.title}}
-          </div>
 
+    <tabset style="height:100%">
+    <tab heading="ORC" id="orc_tab" style="height:100%">
+    <textarea cols="80" rows="20" id="orc_code"
+      style="width:100%; height:100%" ng-model="note.orc" ></textarea>
+    </tab>
+
+    <tab heading="SCO" id="sco_tab">
+    <textarea cols="80" rows="20" style="width:100%" 
+      ng-model="note.sco" id="sco_code"></textarea>
+    </tab>
+
+    <tab heading="Console">
+    <textarea class="console" cols="80" rows="20" id="console"
+      style="width:100%">Csound: not loaded</textarea>
+    </tab>
+
+    <tab heading="Help">
+    <div>
+      <h4>Shortcuts</h4>
+      <ul>
+        <li>shift-enter - evaluate selection or full text area if orc or sco tab is selected</li>
+      </ul>
     </div>
-
-    <div class="col-md-8">
-
-      Title: <input ng-model="note.title"/>
-
-      <div class="btn-toolbar">
-        <button id="playButton" type="button" class="btn btn-default">Play</button>
-        <button id="evalButton" type="button" class="btn btn-default">Evaluate</button>
-        <button id="saveButton" type="button" class="btn btn-default"
-          ng-click="saveNote(note)">Save</button>
-        <button id="deleteButton" type="button" class="btn btn-default"
-          ng-click="deleteNote(note)">Delete</button>
-      </div>
-
-
-      <tabset>
-        <tab heading="ORC" id="orc_tab">
-          <textarea cols="80" rows="20" id="orc_code"
-            style="width:100%" ng-model="note.orc" ></textarea>
-        </tab>
-
-        <tab heading="SCO" id="sco_tab">
-          <textarea cols="80" rows="20" style="width:100%" 
-            ng-model="note.sco" id="sco_code"></textarea>
-        </tab>
-
-        <tab heading="Console">
-          <textarea class="console" cols="80" rows="20" id="console"
-            style="width:100%">Csound: not loaded</textarea>
-        </tab>
-
-        <tab heading="Help">
-          <div>
-          <h4>Shortcuts</h4>
-          <ul>
-            <li>shift-enter - evaluate selection or full text area if orc or sco tab is selected</li>
-          </ul>
-          </div>
-        </tab>
-      </tabset>
-
+    </tab>
+    </tabset>
   </div>
 
 </div>
+
 
 
 

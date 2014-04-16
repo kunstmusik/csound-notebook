@@ -4,11 +4,16 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    if(params[:notebook_id] == nil or params[:notebook_id] == '0')
-      @notes = Note.where(:user_id => current_user.id).to_a 
-    else
-      @notes = Note.where(:user_id => current_user.id, 
-                          :notebook_id => params[:notebook_id]).to_a 
+    respond_to do |format|
+      format.html { redirect_to :index }
+      format.json {
+        if(params[:notebook_id] == nil or params[:notebook_id] == '0')
+          @notes = Note.where(:user_id => current_user.id).to_a 
+        else
+          @notes = Note.where(:user_id => current_user.id, 
+                              :notebook_id => params[:notebook_id]).to_a 
+        end
+      }
     end
   end
 
