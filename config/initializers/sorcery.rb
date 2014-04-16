@@ -228,7 +228,7 @@ Rails.application.config.sorcery.configure do |config|
     # Default: `604800`
     #
     # user.remember_me_for =
-
+    user.remember_me_for = 1209600
 
     # -- user_activation --
     # the attribute name to hold activation state (active/pending).
