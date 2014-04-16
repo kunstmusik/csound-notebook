@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+      redirect_to(:index)
   end
 
   # GET /users/1
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to :users, notice: 'User was successfully created.' }
+        format.html { redirect_to :users, notice: 'Account created successfully. Please check your email to activate your account before logging in.' }
         format.json { render action: 'show', status: :created, location: @user }
       else
         format.html { render action: 'new' }
