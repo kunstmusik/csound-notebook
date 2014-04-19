@@ -28,6 +28,14 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
 
     var notebooks = [ allNotesNotebook ];
 
+    $scope.orcTextLoaded = function(_editor){
+      $scope.orcTextEditor = _editor;
+    };
+
+    $scope.scoTextLoaded = function(_editor) {
+      $scope.scoTextEditor = _editor;
+    }
+
     $scope.reloadNotebooks = function() {
       $http.get('/notebooks.json?callback=JSON_CALLBACK').success(function(data, status, headers, config) {
         $scope.notebooks = [ allNotesNotebook].concat(data);
@@ -159,6 +167,33 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
            alert("Oh no!  Couldn't load my notebooks... :( ");
         });
       }
+    };
+
+
+    $scope.evalCsoundCode = function() {
+      var orcTab = $('#orc_tab');
+      var scoTab = $('#sco_tab');
+
+      if (orcTab[0].className.search('active') >= 0) {
+        var selection = $scope.orcTextEditor.getSelectionRange();
+        if(selection.isEmpty()) {
+          csound.CompileOrc($scope.orcTextEditor.getValue() );
+        } else {
+          csound.CompileOrc($scope.orcTextEditor.session.getTextRange(selection));
+        }
+      } else if (scoTab[0].className.search('active') >= 0) {
+        var selection = $scope.scoTextEditor.getSelectionRange();
+        if(selection.isEmpty()) {
+          csound.ReadScore($scope.scoTextEditor.getValue() );
+        } else {
+          csound.ReadScore($scope.scoTextEditor.session.getTextRange(selection));
+        }
+      }
+    }
+
+    $scope.handleShortcut = function(evt) {
+      $scope.evalCsoundCode();
+      evt.preventDefault();
     };
 
   }]);

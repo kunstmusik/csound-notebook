@@ -1,4 +1,4 @@
-<div class="wrapper" ng-controller="NotebooksController">
+<div class="wrapper" ng-controller="NotebooksController" ui-keydown="{'shift-enter':'handleShortcut($event)'}">
 
   <div id="sidebar-wrapper" class="col-md-2">
 
@@ -43,7 +43,7 @@
 
     <div class="btn-toolbar">
       <button id="playButton" type="button" class="btn btn-default">Play</button>
-      <button id="evalButton" type="button" class="btn btn-default">Evaluate</button>
+      <button id="evalButton" type="button" class="btn btn-default" ng-click="evalCsoundCode()">Evaluate</button>
       <button id="saveButton" type="button" class="btn btn-default"
         ng-click="saveNote(note)">Save</button>
       <button id="deleteButton" type="button" class="btn btn-default"
@@ -53,13 +53,10 @@
 
     <tabset style="height:100%">
     <tab heading="ORC" id="orc_tab" style="height:100%">
-    <textarea cols="80" rows="20" id="orc_code"
-      style="width:100%; height:100%" ng-model="note.orc" ></textarea>
-    </tab>
+    <div ui-ace="{onLoad: orcTextLoaded}" ng-model="note.orc" ></div></tab>
 
     <tab heading="SCO" id="sco_tab">
-    <textarea cols="80" rows="20" style="width:100%" 
-      ng-model="note.sco" id="sco_code"></textarea>
+    <div ui-ace="{onLoad: scoTextLoaded}" ng-model="note.sco"></div></tab>
     </tab>
 
     <tab heading="Console">

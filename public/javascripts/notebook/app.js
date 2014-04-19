@@ -5,7 +5,8 @@
 var notebookApp = angular.module('notebookApp', [
   //'ngRoute',
   //'phonecatAnimations',
-
+  'ui.ace',
+  'ui.keypress',
   'notebookControllers',
   //'phonecatFilters',
   //'phonecatServices'
