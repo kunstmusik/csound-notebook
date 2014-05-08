@@ -18,3 +18,5 @@
 /nbproject/private*
 development.sqlite3_test
 config/database.yml
+
+/doc
