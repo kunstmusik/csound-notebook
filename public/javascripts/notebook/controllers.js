@@ -171,17 +171,17 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
 
 
     $scope.evalCsoundCode = function() {
-      var orcTab = $('#orc_tab');
-      var scoTab = $('#sco_tab');
+      var orcTab = $('#orcEditor');
+      var scoTab = $('#scoEditor');
 
-      if (orcTab[0].className.search('active') >= 0) {
+      if (orcTab.css("display") == "block") {
         var selection = $scope.orcTextEditor.getSelectionRange();
         if(selection.isEmpty()) {
           csound.CompileOrc($scope.orcTextEditor.getValue() );
         } else {
           csound.CompileOrc($scope.orcTextEditor.session.getTextRange(selection));
         }
-      } else if (scoTab[0].className.search('active') >= 0) {
+      } else if (scoTab.css("display") == "block") {
         var selection = $scope.scoTextEditor.getSelectionRange();
         if(selection.isEmpty()) {
           csound.ReadScore($scope.scoTextEditor.getValue() );
@@ -195,6 +195,21 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       $scope.evalCsoundCode();
       evt.preventDefault();
     };
+
+    $scope.selectTab = function(evt) {
+      var buttons = $('#editorButtons').children(".btn");
+      var panes = $('#editorPanes').children();
+      for(var i = 0; i < buttons.length; i++) {
+        $(buttons[i]).removeClass("active");
+
+        if (buttons[i] == evt.srcElement) {
+          $(buttons[i]).addClass("active");
+          $(panes[i]).css("display", "block");
+        } else {
+          $(panes[i]).css("display", "none");
+        }
+      }
+    }
 
   }]);
 

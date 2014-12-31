@@ -1,5 +1,13 @@
-<div class="wrapper" ng-controller="NotebooksController" ui-keydown="{'shift-enter':'handleShortcut($event)'}">
 
+
+  <%#<div id="left-sidebar" class="left-menu">%>
+  <%#  <a href="test">Test</a>%>
+  <%#</div>%>
+
+
+<div class="container-fluid">
+<div class="row" ng-controller="NotebooksController" ui-keydown="{'shift-enter':'handleShortcut($event)'}">
+  
   <div id="sidebar-wrapper" class="col-md-2">
 
     <div class="sidebar-header">
@@ -38,46 +46,71 @@
     </div>
   </div>
 
-  <div class="col-md-8 pull-right" ng-show="note != null">
-    Title: <input ng-model="note.title"/>
+  <div class="col-md-8 pull-right" style="height: 100%" ng-show="note != null">
 
-    <div class="btn-toolbar">
-      <button id="playButton" type="button" class="btn btn-default">Play</button>
-      <button id="evalButton" type="button" class="btn btn-default" ng-click="evalCsoundCode()">Evaluate</button>
-      <button id="saveButton" type="button" class="btn btn-default"
+    <div style="margin: 5px">
+    Title: <input ng-model="note.title"/> <br/>
+    </div>
+
+    <div class="panel panel-primary" style="height: 100%">
+      <div class="panel-heading" style="height: 100%">
+
+        <div id="editorButtons" class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn btn-primary btn-sm active" id="orcButton" ng-click="selectTab($event)">ORC</button>
+          <button type="button" class="btn btn-primary btn-sm" id="scoButton" ng-click="selectTab($event)">SCO</button>
+          <button type="button" class="btn btn-primary btn-sm" id="consoleButton" ng-click="selectTab($event)">Console</button>
+          <button type="button" class="btn btn-primary btn-sm" id="helpButton" ng-click="selectTab($event)">Help</button>
+        </div>
+
+        <div class="btn-group pull-right" role="group" aria-label="...">
+      <button id="playButton" type="button" class="btn btn-primary btn-sm">Play</button>
+      <button id="evalButton" type="button" class="btn btn-primary btn-sm" ng-click="evalCsoundCode()">Evaluate</button>
+      <button id="saveButton" type="button" class="btn btn-primary btn-sm"
         ng-click="saveNote(note)">Save</button>
-      <button id="deleteButton" type="button" class="btn btn-default"
+      <button id="deleteButton" type="button" class="btn btn-primary btn-sm"
         ng-click="deleteNote(note)">Delete</button>
+        </div>
+      </div>
+
+      <div id="editorPanes">
+        <div id="orcEditor" ui-ace="{onLoad: orcTextLoaded}" ng-model="note.orc"></div>
+        <div id="scoEditor" ui-ace="{onLoad: scoTextLoaded}" ng-model="note.sco" 
+        style="display:none"></div>
+        <textarea class="console" cols="80" rows="20" id="console"
+            style="width:100%;display:none">Csound: not loaded</textarea>
+
+        <div style="display:none">
+          <h4>Shortcuts</h4>
+          <ul>
+            <li><kbd>shift-enter</kbd> - evaluate selection or full text area if orc or sco tab is selected</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
 
-    <tabset style="height:100%">
-    <tab heading="ORC" id="orc_tab" style="height:100%">
-    <div ui-ace="{onLoad: orcTextLoaded}" ng-model="note.orc" ></div></tab>
+    <%#<tabset style="height:100%">%>
+    <%#  <tab heading="ORC" id="orc_tab" style="height:100%">%>
+    <%#    <div ui-ace="{onLoad: orcTextLoaded}" ng-model="note.orc" ></div>%>
+    <%#  </tab>%>
 
-    <tab heading="SCO" id="sco_tab">
-    <div ui-ace="{onLoad: scoTextLoaded}" ng-model="note.sco"></div></tab>
-    </tab>
+    <%#  <tab heading="SCO" id="sco_tab">%>
+    <%#    <div ui-ace="{onLoad: scoTextLoaded}" ng-model="note.sco"></div>%>
+    <%#  </tab>%>
 
-    <tab heading="Console">
-    <textarea class="console" cols="80" rows="20" id="console"
-      style="width:100%">Csound: not loaded</textarea>
-    </tab>
+    <%#  <tab heading="Console">%>
+    <%#    <textarea class="console" cols="80" rows="20" id="console"%>
+    <%#      style="width:100%">Csound: not loaded</textarea>%>
+    <%#  </tab>%>
 
-    <tab heading="Help">
-    <div>
-      <h4>Shortcuts</h4>
-      <ul>
-        <li>shift-enter - evaluate selection or full text area if orc or sco tab is selected</li>
-      </ul>
-    </div>
-    </tab>
-    </tabset>
+    <%#  <tab heading="Help">%>
+    <%#  </tab>%>
+    <%#</tabset>%>
   </div>
 
 </div>
 
-
+</div>
 
 
 <!--pNaCl csound module-->
