@@ -73,13 +73,17 @@
       </div>
 
       <div id="editorPanes">
-        <div id="orcEditor" ui-ace="{onLoad: orcTextLoaded}" ng-model="note.orc"></div>
-        <div id="scoEditor" ui-ace="{onLoad: scoTextLoaded}" ng-model="note.sco" 
+        <div id="orcEditor" 
+             ui-ace="{onLoad: orcTextLoaded, mode: 'csound'}" 
+             ng-model="note.orc"></div>
+        <div id="scoEditor" 
+             ui-ace="{onLoad: scoTextLoaded }" 
+             ng-model="note.sco" 
         style="display:none"></div>
         <textarea class="console" cols="80" rows="20" id="console"
-            style="width:100%;display:none">Csound: not loaded</textarea>
+            style="width:100%;display:none;height:100%">Csound: not loaded</textarea>
 
-        <div style="display:none">
+        <div style="display:none; padding: 10px">
           <h4>Shortcuts</h4>
           <ul>
             <li><kbd>shift-enter</kbd> - evaluate selection or full text area if orc or sco tab is selected</li>
