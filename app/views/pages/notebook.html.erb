@@ -52,8 +52,8 @@
     Title: <input ng-model="note.title"/> <br/>
     </div>
 
-    <div class="panel panel-primary" style="height: 100%">
-      <div class="panel-heading" style="height: 100%">
+    <div class="panel panel-primary">
+      <div class="panel-heading" >
 
         <div id="editorButtons" class="btn-group" role="group" aria-label="...">
           <button type="button" class="btn btn-primary btn-sm active" id="orcButton" ng-click="selectTab($event)">ORC</button>
@@ -88,24 +88,6 @@
       </div>
     </div>
 
-
-    <%#<tabset style="height:100%">%>
-    <%#  <tab heading="ORC" id="orc_tab" style="height:100%">%>
-    <%#    <div ui-ace="{onLoad: orcTextLoaded}" ng-model="note.orc" ></div>%>
-    <%#  </tab>%>
-
-    <%#  <tab heading="SCO" id="sco_tab">%>
-    <%#    <div ui-ace="{onLoad: scoTextLoaded}" ng-model="note.sco"></div>%>
-    <%#  </tab>%>
-
-    <%#  <tab heading="Console">%>
-    <%#    <textarea class="console" cols="80" rows="20" id="console"%>
-    <%#      style="width:100%">Csound: not loaded</textarea>%>
-    <%#  </tab>%>
-
-    <%#  <tab heading="Help">%>
-    <%#  </tab>%>
-    <%#</tabset>%>
   </div>
 
 </div>

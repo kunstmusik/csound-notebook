@@ -80,8 +80,30 @@ body {
 }
 
 .ace_editor {
-  top: 0; right: 0; bottom: 0; left: 0;
-  height: 400px;
+  position: absolute;
+  top: 0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+#editorPanes {
+  left:0;
+  bottom:0;
+  right:0;
+  top:0;
+  height:calc(100% - 52px);
+}
+
+#orceditor {
+  height:100%;
+}
+
+.panel {
+  position: fixed;
+  top:86px;
+  bottom:0;
+  width:calc(66% - 20px);
 }
 
 /*@media (max-width: 992px) {*/
