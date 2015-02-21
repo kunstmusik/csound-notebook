@@ -132,6 +132,23 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       $scope.note = note;
     }
 
+
+    $scope.exportCSD = function(note) {
+      var csd = "<CsoundSynthesizer>\n<CsInstruments>\n"
+      csd += $scope.orcTextEditor.getValue();
+      csd += "\n</CsInstruments>\n<CsScore>\n"
+      csd += $scope.scoTextEditor.getValue();
+      csd += "\n</CsScore>\n<CsoundSynthesizer>\n"
+        
+      var blob = new Blob([csd], {type: "text/plain;charset=utf-8"});
+
+      var name = $scope.note.title.trim();
+      if(name.length == 0) { name = "notebook"; }
+      var csdName = name.replace(/ /g, "_") + ".csd";
+
+      saveAs(blob, csdName);
+    }
+
     $scope.saveNote = function(note) {
       console.log("Saving note " + note.id); 
      
