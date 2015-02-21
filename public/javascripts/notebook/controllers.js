@@ -155,7 +155,7 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       if(note.id <= 0) {
         $http.post('/notes.json?callback=JSON_CALLBACK', note )
           .success(function(data, status, headers, config) {
-            note.id = note.id; // update note.id
+            $scope.note.id = data.id; // update note.id
           }).error(function(data, status, headers, config) {
             alert("Oh no!  Couldn't load my notebooks... :( ");
           });
