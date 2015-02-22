@@ -1,3 +1,10 @@
+
+
+  <%#<div id="left-sidebar" class="left-menu">%>
+  <%#  <a href="test">Test</a>%>
+  <%#</div>%>
+
+
 <div class="container-fluid">
 <div class="row" ng-controller="NotebooksController" ui-keydown="{'shift-enter':'handleShortcut($event)'}">
   
@@ -61,7 +68,7 @@
         </div>
 
         <div class="btn-group pull-right" role="group" aria-label="...">
-          <button id="playButton" type="button" class="btn btn-primary btn-sm">Play</button>
+          <button id="playButton" type="button" class="btn btn-primary btn-sm" ng-click="togglePlay()">Play</button>
           <button id="evalButton" type="button" class="btn btn-primary btn-sm" ng-click="evalCsoundCode()">Evaluate</button>
           <button id="saveButton" type="button" class="btn btn-primary btn-sm"
             ng-click="saveNote(note)">Save</button>
@@ -78,7 +85,7 @@
              ui-ace="{onLoad: scoTextLoaded }" 
              ng-model="note.sco" 
         style="display:none"></div>
-        <textarea class="console" cols="80" rows="20" id="console"
+        <textarea class="console" cols="80" rows="20" id="consoleText"
             style="width:100%;display:none;height:100%">Csound: not loaded</textarea>
 
         <div style="display:none; padding: 10px">
@@ -95,8 +102,4 @@
 </div>
 
 </div>
-
-
-<!--pNaCl csound module-->
-<div id="engine"></div>
 

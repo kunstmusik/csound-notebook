@@ -26,6 +26,9 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
     $scope.notes = [];
     $scope.notebooks = notebooks;
 
+    $scope.csoundObj = null; 
+    $scope.playing = false;
+
     var notebooks = [ allNotesNotebook ];
 
     $scope.orcTextLoaded = function(_editor){
@@ -189,23 +192,55 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
     $scope.evalCsoundCode = function() {
       var orcTab = $('#orcEditor');
       var scoTab = $('#scoEditor');
+      var csoundObj = $scope.csoundObj;
+
+      if (csoundObj == null) { return; }
 
       if (orcTab.css("display") == "block") {
         var selection = $scope.orcTextEditor.getSelectionRange();
         if(selection.isEmpty()) {
-          csound.CompileOrc($scope.orcTextEditor.getValue() );
+          csoundObj.evaluateCode($scope.orcTextEditor.getValue() );
         } else {
-          csound.CompileOrc($scope.orcTextEditor.session.getTextRange(selection));
+          csoundObj.evaluateCode($scope.orcTextEditor.session.getTextRange(selection));
         }
       } else if (scoTab.css("display") == "block") {
         var selection = $scope.scoTextEditor.getSelectionRange();
         if(selection.isEmpty()) {
-          csound.ReadScore($scope.scoTextEditor.getValue() );
+          csoundObj.readScore($scope.scoTextEditor.getValue() );
         } else {
-          csound.ReadScore($scope.scoTextEditor.session.getTextRange(selection));
+          csoundObj.readScore($scope.scoTextEditor.session.getTextRange(selection));
         }
       }
     }
+
+    $scope.dummyCSD = "<CsoundSynthesizer>\n<CsInstruments>0dbfs=1.0\nnchnls=2\n</CsInstruments>\n<CsScore>\n</CsScore>\n</CsoundSynthesizer>\n";
+
+    $scope.togglePlay = function() {
+
+      var hasInnerText = (document.getElementsByTagName("body")[0].innerText != undefined) ? true : false;
+      var playButton = document.getElementById('playButton');
+
+      if(!$scope.playing) {
+        $scope.playing = true;
+        $scope.csoundObj = new CsoundObj();
+        FS.writeFile("/temp.csd", $scope.dummyCSD, {encoding: 'utf8'});
+        $scope.csoundObj.compileCSD("/temp.csd");
+        $scope.csoundObj.start();
+        if(hasInnerText) {
+          playButton.innerText = "Stop";
+        } else {
+          playButton.textContent = "Stop";
+        }
+      } else {
+        $scope.csoundObj.stop()
+        if(hasInnerText) {
+          playButton.innerText = "Play";
+        } else {
+          playButton.textContent = "Play";
+        }
+        $scope.playing = false;
+      }
+    };
 
     $scope.handleShortcut = function(evt) {
       $scope.evalCsoundCode();
@@ -235,5 +270,4 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
     //}
 
   }]);
-
 

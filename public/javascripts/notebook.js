@@ -7,28 +7,6 @@ function showMenuButton(listItem) {
   console.log(listItem);
 }
 
-//function evalCode() {
-//  var orcText = $("#orc_code");
-//  var scoText = $("#sco_code");
-//  var orcTab = $('#orc_tab');
-//  var scoTab = $('#sco_tab');
-
-//  if (orcTab[0].className.search('active') >= 0) {
-//    var selection = orcText.textrange('get');
-//    if(selection.length > 0) {
-//      csound.CompileOrc( selection.text );
-//    } else {
-//      csound.CompileOrc( orcText.val() + "\n");
-//    }
-//  } else if (scoTab[0].className.search('active') >= 0) {
-//    var selection = scoText.textrange('get');
-//    if(selection.length > 0) {
-//      csound.ReadScore( selection.text );
-//    } else {
-//      csound.ReadScore( scoText.val() + "\n");
-//    }
-//  }
-//}
 
 // CSOUND RELATED FUNCTIONS
 

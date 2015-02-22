@@ -14,4 +14,9 @@ class PagesController < ApplicationController
   def notebook 
     render layout: "notebook"
   end
+
+
+  def notebookjs
+    render layout: "notebookjs"
+  end
 end
