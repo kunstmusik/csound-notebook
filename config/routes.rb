@@ -13,6 +13,8 @@ CsoundNotebook::Application.routes.draw do
   get :index, to: 'pages#index'
   get :notebook, to: 'pages#notebook'
   get :notebookjs, to: 'pages#notebookjs'
+  get 'note/:id', to: 'pages#note'
+  get 'notejs/:id', to: 'pages#notejs'
   resources :user_sessions
   resources :users 
   resources :users do

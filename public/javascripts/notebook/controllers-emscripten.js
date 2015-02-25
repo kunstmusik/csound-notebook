@@ -4,14 +4,13 @@
 
 var notebookControllers = angular.module('notebookControllers', []);
 
-/* NOTES CONTROLLER */
-
 var templateNote = {
       id: 100,
       orc: "sr=44100\nksmps=32\nnchnls=2\n0dbfs=1\n\ninstr 1\nipch = cps2pch(p4,12)\niamp = ampdbfs(p5)\naenv linsegr 0, 0.01, 1, 0.01, .9, .3, 0\naout vco2 iamp, ipch\naout = aout * aenv\naout moogladder aout, 2000, .3\nouts aout, aout\nendin",
   
       sco: "i1 0 1 8.00 -12\ni1 0 1 8.04 -12\ni1 0 1 8.07 -12",
-      title: "My Note"
+      title: "My Note",
+      public: false
 };
 
 
@@ -268,6 +267,121 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
     //  if (
     //  return "Please verify you wish to exit this page. (You may have unsaved work.)"; 
     //}
+
+  }]);
+
+
+/* NOTE CONTROLLER */
+
+notebookControllers.controller('NoteController', ['$scope','$http', 
+  function($scope, $http) {
+
+    $scope.note = GLOBAL_NOTE;
+    $scope.csoundObj = null; 
+    $scope.playing = false;
+
+    $scope.orcTextLoaded = function(_editor){
+      $scope.orcTextEditor = _editor;
+    };
+
+    $scope.scoTextLoaded = function(_editor) {
+      $scope.scoTextEditor = _editor;
+    }
+
+    $scope.setNote = function(n) {
+      $scope.note = n;
+    }
+
+    $scope.exportCSD = function(note) {
+      var csd = "<CsoundSynthesizer>\n<CsInstruments>\n"
+      csd += $scope.orcTextEditor.getValue();
+      csd += "\n</CsInstruments>\n<CsScore>\n"
+      csd += $scope.scoTextEditor.getValue();
+      csd += "\n</CsScore>\n<CsoundSynthesizer>\n"
+        
+      var blob = new Blob([csd], {type: "text/plain;charset=utf-8"});
+
+      var name = $scope.note.title.trim();
+      if(name.length == 0) { name = "notebook"; }
+      var csdName = name.replace(/ /g, "_") + ".csd";
+
+      saveAs(blob, csdName);
+    }
+
+    $scope.evalCsoundCode = function() {
+      var orcTab = $('#orcEditor');
+      var scoTab = $('#scoEditor');
+      var csoundObj = $scope.csoundObj;
+
+      if (csoundObj == null) { return; }
+
+      if (orcTab.css("display") == "block") {
+        var selection = $scope.orcTextEditor.getSelectionRange();
+        if(selection.isEmpty()) {
+          csoundObj.evaluateCode($scope.orcTextEditor.getValue() );
+        } else {
+          csoundObj.evaluateCode($scope.orcTextEditor.session.getTextRange(selection));
+        }
+      } else if (scoTab.css("display") == "block") {
+        var selection = $scope.scoTextEditor.getSelectionRange();
+        if(selection.isEmpty()) {
+          csoundObj.readScore($scope.scoTextEditor.getValue() );
+        } else {
+          csoundObj.readScore($scope.scoTextEditor.session.getTextRange(selection));
+        }
+      }
+    }
+
+    $scope.dummyCSD = "<CsoundSynthesizer>\n<CsInstruments>0dbfs=1.0\nnchnls=2\n</CsInstruments>\n<CsScore>\n</CsScore>\n</CsoundSynthesizer>\n";
+
+    $scope.togglePlay = function() {
+
+      var hasInnerText = (document.getElementsByTagName("body")[0].innerText != undefined) ? true : false;
+      var playButton = document.getElementById('playButton');
+
+      if(!$scope.playing) {
+        $scope.playing = true;
+        $scope.csoundObj = new CsoundObj();
+        FS.writeFile("/temp.csd", $scope.dummyCSD, {encoding: 'utf8'});
+        $scope.csoundObj.compileCSD("/temp.csd");
+        $scope.csoundObj.start();
+        if(hasInnerText) {
+          playButton.innerText = "Stop";
+        } else {
+          playButton.textContent = "Stop";
+        }
+      } else {
+        $scope.csoundObj.stop()
+        if(hasInnerText) {
+          playButton.innerText = "Play";
+        } else {
+          playButton.textContent = "Play";
+        }
+        $scope.playing = false;
+      }
+    };
+
+    $scope.handleShortcut = function(evt) {
+      $scope.evalCsoundCode();
+      evt.preventDefault();
+    };
+
+    $scope.selectTab = function(evt) {
+      var buttons = $('#editorButtons').children(".btn");
+      var panes = $('#editorPanes').children();
+      var elem = evt.target || evt.srcElement;
+
+      for(var i = 0; i < buttons.length; i++) {
+        $(buttons[i]).removeClass("active");
+
+        if (buttons[i] == elem) {
+          $(buttons[i]).addClass("active");
+          $(panes[i]).css("display", "block");
+        } else {
+          $(panes[i]).css("display", "none");
+        }
+      }
+    }
 
   }]);
 

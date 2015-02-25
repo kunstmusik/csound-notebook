@@ -1,0 +1,59 @@
+<script>
+  GLOBAL_NOTE = <%= @note.to_json.html_safe %>;
+</script>
+
+<div class="container-fluid">
+<div class="row" ng-controller="NoteController" ui-keydown="{'shift-enter':'handleShortcut($event)'}">
+  
+  <div class="col-md-12" style="height: 100%" ng-show="note != null">
+
+    <div style="margin: 5px">
+      Title: <input ng-model="note.title"/> </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading" >
+
+        <div id="editorButtons" class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn btn-primary btn-sm active" id="orcButton" ng-click="selectTab($event)">ORC</button>
+          <button type="button" class="btn btn-primary btn-sm" id="scoButton" ng-click="selectTab($event)">SCO</button>
+          <button type="button" class="btn btn-primary btn-sm" id="consoleButton" ng-click="selectTab($event)">Console</button>
+          <button type="button" class="btn btn-primary btn-sm" id="helpButton" ng-click="selectTab($event)">Help</button>
+        </div>
+
+
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn btn-primary btn-sm" id="exportCSDButton" ng-click="exportCSD()">Download CSD</button>
+        </div>
+
+        <div class="btn-group pull-right" role="group" aria-label="...">
+          <button id="playButton" type="button" class="btn btn-primary btn-sm" ng-click="togglePlay()">Play</button>
+          <button id="evalButton" type="button" class="btn btn-primary btn-sm" ng-click="evalCsoundCode()">Evaluate</button>
+        </div>
+      </div>
+
+      <div id="editorPanes">
+        <div id="orcEditor" 
+             ui-ace="{onLoad: orcTextLoaded, mode: 'csound'}" 
+             ng-model="note.orc"></div>
+        <div id="scoEditor" 
+             ui-ace="{onLoad: scoTextLoaded }" 
+             ng-model="note.sco" 
+        style="display:none"></div>
+        <textarea class="console" cols="80" rows="20" id="consoleText"
+            style="width:100%;display:none;height:100%"></textarea>
+
+        <div style="display:none; padding: 10px">
+          <h4>Shortcuts</h4>
+          <ul>
+            <li><kbd>shift-enter</kbd> - evaluate selection or full text area if orc or sco tab is selected</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+

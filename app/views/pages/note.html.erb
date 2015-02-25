@@ -1,49 +1,14 @@
+<script>
+  GLOBAL_NOTE = <%= @note.to_json.html_safe %>;
+</script>
+
 <div class="container-fluid">
-<div class="row" ng-controller="NotebooksController" ui-keydown="{'shift-enter':'handleShortcut($event)'}">
+<div id="notediv" class="row" ng-controller="NoteController" ui-keydown="{'shift-enter':'handleShortcut($event)'}">
   
-  <div id="sidebar-wrapper" class="col-md-2">
-
-    <div class="sidebar-header">
-      <h4>Notebooks</h4> 
-      <button ng-click="addNotebook()" class="float-button">+</button></h4>
-  </div>
-
-    <div class="sidebar">
-      <ul class="nav list-group">
-        <li ng-repeat="notebook in notebooks" 
-        >
-        <a class="list-group-item" ng-click="selectNotebook(notebook);"
-          ng-mouseenter="showMenuButton('test');"
-          ng-mouseleave="hideMenuButton(this);"
-          >
-          <i class="icon-home icon-1x"></i>{{notebook.name}}</a>
-        <button ng-show="notebook.id > 0" ng-click="deleteNotebook(notebook)" class="float-button" >-</button></h4>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div id="sidebar-wrapper2" class="col-md-2">
-    <div class="sidebar-header">
-      <h4>{{currentNotebook.name}}</h4>
-      <button ng-click="newNote(currentNotebook.id)" class="float-button">+</button></h4>
-  </div>
-
-    <div class="sidebar">
-      <ul class="nav list-group">
-        <li ng-repeat="note in notes">
-        <a class="list-group-item" ng-click="selectNote(note);">
-          <i class="icon-home icon-1x"></i>{{note.title}}</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="col-md-8 pull-right" style="height: 100%" ng-show="note != null">
+  <div class="" style="height: 100%" ng-show="note != null">
 
     <div style="margin: 5px">
-      Title: <input ng-model="note.title"/> <input type="checkbox" ng-model="note.public"/> Public  
-    </div>
+      Title: <input ng-model="note.title"/></div>
 
     <div class="panel panel-primary">
       <div class="panel-heading" >
@@ -63,10 +28,6 @@
         <div class="btn-group pull-right" role="group" aria-label="...">
           <button id="playButton" type="button" class="btn btn-primary btn-sm">Play</button>
           <button id="evalButton" type="button" class="btn btn-primary btn-sm" ng-click="evalCsoundCode()">Evaluate</button>
-          <button id="saveButton" type="button" class="btn btn-primary btn-sm"
-            ng-click="saveNote(note)">Save</button>
-          <button id="deleteButton" type="button" class="btn btn-primary btn-sm"
-            ng-click="deleteNote(note)">Delete</button>
         </div>
       </div>
 

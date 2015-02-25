@@ -1,6 +1,7 @@
 'use strict';
 
 /* App Module */
+var GLOBAL_NOTE = null;
 
 var notebookApp = angular.module('notebookApp', [
   'ui.ace',
