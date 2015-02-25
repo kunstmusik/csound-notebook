@@ -1,5 +1,5 @@
 <script>
-  GLOBAL_NOTE = <%= @note.to_json.html_safe %>;
+  GLOBAL_NOTE = <%= raw json_escape(@note.to_json) %>;
 </script>
 
 <div class="container-fluid">
