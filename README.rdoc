@@ -1,6 +1,6 @@
 == README
 
-Welcome to the Csound Notebook.  This applications is built using Ruby on Rails for the server-side and AngularJS and Bootcamp on the client-side. 
+Welcome to the Csound Notebook.  This applications is built using Ruby on Rails for the server-side and AngularJS and Bootstrap on the client-side. 
 
 To get started:
 
