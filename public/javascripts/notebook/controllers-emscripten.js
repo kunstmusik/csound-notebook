@@ -30,6 +30,11 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
 
     var notebooks = [ allNotesNotebook ];
 
+    $scope.publicURL = function() {
+      var l = document.location;
+      return l.protocol + "//" + l.host + "/notejs/" + $scope.note.id;
+    }
+
     $scope.orcTextLoaded = function(_editor){
       $scope.orcTextEditor = _editor;
     };
@@ -279,6 +284,11 @@ notebookControllers.controller('NoteController', ['$scope','$http',
     $scope.note = GLOBAL_NOTE;
     $scope.csoundObj = null; 
     $scope.playing = false;
+
+    $scope.switchNoteURL= function() {
+      var l = document.location;
+      return l.protocol + "//" + l.host + "/note/" + $scope.note.id;
+    }
 
     $scope.orcTextLoaded = function(_editor){
       $scope.orcTextEditor = _editor;

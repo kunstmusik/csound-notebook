@@ -8,7 +8,9 @@
   <div class="" style="height: 100%" ng-show="note != null">
 
     <div style="margin: 5px">
-      Title: <input ng-model="note.title"/></div>
+      Title: <input ng-model="note.title"/>
+      <a href="{{switchNoteURL()}}">View with Emscripten</a>
+    </div>
 
     <div class="panel panel-primary">
       <div class="panel-heading" >
@@ -22,7 +24,7 @@
 
 
         <div class="btn-group" role="group" aria-label="...">
-          <button type="button" class="btn btn-primary btn-sm" id="exportCSDButton" ng-click="exportCSD()">Save CSD</button>
+          <button type="button" class="btn btn-primary btn-sm" id="exportCSDButton" ng-click="exportCSD()">Download CSD</button>
         </div>
 
         <div class="btn-group pull-right" role="group" aria-label="...">

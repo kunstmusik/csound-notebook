@@ -43,6 +43,7 @@
 
     <div style="margin: 5px">
       Title: <input ng-model="note.title"/> <input type="checkbox" ng-model="note.public"/> Public  
+      <a ng-show="note.public" href="{{publicURL()}}" target="_blank">{{publicURL()}}</a>
     </div>
 
     <div class="panel panel-primary">
@@ -57,7 +58,7 @@
 
 
         <div class="btn-group" role="group" aria-label="...">
-          <button type="button" class="btn btn-primary btn-sm" id="exportCSDButton" ng-click="exportCSD()">Save CSD</button>
+          <button type="button" class="btn btn-primary btn-sm" id="exportCSDButton" ng-click="exportCSD()">Download CSD</button>
         </div>
 
         <div class="btn-group pull-right" role="group" aria-label="...">

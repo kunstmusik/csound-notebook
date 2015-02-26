@@ -37,6 +37,7 @@
       <ul class="nav navbar-nav">
         <li><%= link_to "About", :about %></li>
         <li><%= link_to "My Notebook (PNaCl)", :controller => :pages, action: :notebook %></li>
+        <li><%= link_to "My Notebook (Emscripten)", :controller => :pages, action: :notebookjs %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
     <% if current_user %>

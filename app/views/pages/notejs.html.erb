@@ -5,10 +5,12 @@
 <div class="container-fluid">
 <div class="row" ng-controller="NoteController" ui-keydown="{'shift-enter':'handleShortcut($event)'}">
   
-  <div class="col-md-12" style="height: 100%" ng-show="note != null">
+  <div  style="height: 100%" ng-show="note != null">
 
     <div style="margin: 5px">
-      Title: <input ng-model="note.title"/> </div>
+      Title: <input ng-model="note.title"/>
+      <a href="{{switchNoteURL()}}">View with PNaCl</a>
+    </div>
 
     <div class="panel panel-primary">
       <div class="panel-heading" >
