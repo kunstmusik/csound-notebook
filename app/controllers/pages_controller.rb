@@ -5,6 +5,7 @@ class PagesController < ApplicationController
 
 
   def index
+    @latest_public_notes = Note.latest_public_notes
     render layout: "homepage"
   end
 

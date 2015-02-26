@@ -7,3 +7,17 @@
   </div>
 </div>
 
+<div class="container">
+
+  <h2>Latest Public Notes</h2>
+  <% for note in @latest_public_notes %>
+    <div>
+      <h4><%= note.title %></h4>
+      <h5>User: <%= note.user.username %></h5>
+      <p>  <a href="/notejs/<%= note.id %>" target="_blank">View (Emscripten)</a> -
+      <a href="/note/<%= note.id %>" target="_blank">View (PNaCl)</a></p>
+    </div>
+  <% end %>
+
+</div>
+
