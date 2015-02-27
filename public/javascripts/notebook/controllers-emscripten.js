@@ -10,7 +10,8 @@ var templateNote = {
   
       sco: "i1 0 1 8.00 -12\ni1 0 1 8.04 -12\ni1 0 1 8.07 -12",
       title: "My Note",
-      public: false
+      public: false,
+      livesco: false
 };
 
 
@@ -131,6 +132,8 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       note.sco = templateNote.sco;
       note.title = templateNote.title;
       note.saved = false;
+      note.public = false;
+      note.livesco = false;      
       $scope.note = note;
       $scope.notes = $scope.notes.concat(note);
     }
@@ -139,14 +142,20 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       $scope.note = note;
     }
 
-
-    $scope.exportCSD = function(note) {
+    $scope.getCSD = function() {
       var csd = "<CsoundSynthesizer>\n<CsInstruments>\n"
       csd += $scope.orcTextEditor.getValue();
       csd += "\n</CsInstruments>\n<CsScore>\n"
-      csd += $scope.scoTextEditor.getValue();
-      csd += "\n</CsScore>\n<CsoundSynthesizer>\n"
-        
+      if(!$scope.note.livesco) {
+        csd += $scope.scoTextEditor.getValue();
+      }
+      csd += "\n</CsScore>\n</CsoundSynthesizer>\n"
+
+      return csd;
+    }
+
+    $scope.exportCSD = function(note) {
+      var csd = $scope.getCSD(); 
       var blob = new Blob([csd], {type: "text/plain;charset=utf-8"});
 
       var name = $scope.note.title.trim();
@@ -157,7 +166,7 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
     }
 
     $scope.saveNote = function(note) {
-      //console.log("Saving note " + note.id); 
+      console.log("Saving note " + note.id); 
      
       if(note.id <= 0) {
         $http.post('/notes.json?callback=JSON_CALLBACK', note )
@@ -227,7 +236,7 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       if(!$scope.playing) {
         $scope.playing = true;
         $scope.csoundObj = new CsoundObj();
-        FS.writeFile("/temp.csd", $scope.dummyCSD, {encoding: 'utf8'});
+        FS.writeFile("/temp.csd", $scope.getCSD(), {encoding: 'utf8'});
         $scope.csoundObj.compileCSD("/temp.csd");
         $scope.csoundObj.start();
         if(hasInnerText) {
@@ -266,6 +275,7 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
           $(panes[i]).css("display", "none");
         }
       }
+      $scope.scoActive = $('#scoEditor').css('display') == 'block';
     }
 
     //window.onbeforeunload = function() { 
@@ -341,9 +351,18 @@ notebookControllers.controller('NoteController', ['$scope','$http',
         }
       }
     }
+    
+    $scope.getCSD = function() {
+      var csd = "<CsoundSynthesizer>\n<CsInstruments>\n"
+      csd += $scope.orcTextEditor.getValue();
+      csd += "\n</CsInstruments>\n<CsScore>\n"
+      if(!$scope.note.livesco) {
+        csd += $scope.scoTextEditor.getValue();
+      }
+      csd += "\n</CsScore>\n</CsoundSynthesizer>\n"
 
-    $scope.dummyCSD = "<CsoundSynthesizer>\n<CsInstruments>0dbfs=1.0\nnchnls=2\n</CsInstruments>\n<CsScore>\n</CsScore>\n</CsoundSynthesizer>\n";
-
+      return csd;
+    }
     $scope.togglePlay = function() {
 
       var hasInnerText = (document.getElementsByTagName("body")[0].innerText != undefined) ? true : false;
@@ -352,7 +371,7 @@ notebookControllers.controller('NoteController', ['$scope','$http',
       if(!$scope.playing) {
         $scope.playing = true;
         $scope.csoundObj = new CsoundObj();
-        FS.writeFile("/temp.csd", $scope.dummyCSD, {encoding: 'utf8'});
+        FS.writeFile("/temp.csd", $scope.getCSD(), {encoding: 'utf8'});
         $scope.csoundObj.compileCSD("/temp.csd");
         $scope.csoundObj.start();
         if(hasInnerText) {
@@ -391,6 +410,7 @@ notebookControllers.controller('NoteController', ['$scope','$http',
           $(panes[i]).css("display", "none");
         }
       }
+      $scope.scoActive = $('#scoEditor').css('display') == 'block';
     }
 
   }]);

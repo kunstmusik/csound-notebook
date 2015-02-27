@@ -69,6 +69,10 @@
           <button id="deleteButton" type="button" class="btn btn-primary btn-sm"
             ng-click="deleteNote(note)">Delete</button>
         </div>
+
+        <div id="scoreOptions" ng-show="scoActive">
+          <input type="checkbox" ng-model="note.livesco"/> Live Score
+        </div>
       </div>
 
       <div id="editorPanes">

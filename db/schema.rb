@@ -11,10 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140416220544) do
+ActiveRecord::Schema.define(version: 20150227025208) do
 
-  create_table "notebooks", force: true do |t|
-    t.string   "name"
+  create_table "notebooks", force: :cascade do |t|
+    t.string   "name",       limit: 255
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 20140416220544) do
 
   add_index "notebooks", ["user_id"], name: "index_notebooks_on_user_id"
 
-  create_table "notes", force: true do |t|
-    t.string   "title"
+  create_table "notes", force: :cascade do |t|
+    t.string   "title",       limit: 255
     t.text     "orc"
     t.text     "sco"
     t.integer  "notebook_id"
@@ -31,24 +31,25 @@ ActiveRecord::Schema.define(version: 20140416220544) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.boolean  "livesco",                 default: false
   end
 
   add_index "notes", ["notebook_id"], name: "index_notes_on_notebook_id"
   add_index "notes", ["user_id"], name: "index_notes_on_user_id"
 
-  create_table "users", force: true do |t|
-    t.string   "email",                           null: false
-    t.string   "crypted_password",                null: false
-    t.string   "salt",                            null: false
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                           limit: 255, null: false
+    t.string   "crypted_password",                limit: 255, null: false
+    t.string   "salt",                            limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_me_token"
+    t.string   "remember_me_token",               limit: 255
     t.datetime "remember_me_token_expires_at"
-    t.string   "activation_state"
-    t.string   "activation_token"
+    t.string   "activation_state",                limit: 255
+    t.string   "activation_token",                limit: 255
     t.datetime "activation_token_expires_at"
-    t.string   "username"
-    t.string   "reset_password_token"
+    t.string   "username",                        limit: 255
+    t.string   "reset_password_token",            limit: 255
     t.datetime "reset_password_token_expires_at"
     t.datetime "reset_password_email_sent_at"
   end

@@ -10,7 +10,8 @@ var templateNote = {
   
       sco: "i1 0 1 8.00 -12\ni1 0 1 8.04 -12\ni1 0 1 8.07 -12",
       title: "My Note",
-      public: false
+      public: false,
+      livesco: false
 };
 
 
@@ -128,6 +129,8 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       note.sco = templateNote.sco;
       note.title = templateNote.title;
       note.saved = false;
+      note.public = false;
+      note.livesco = false;
       $scope.note = note;
       $scope.notes = $scope.notes.concat(note);
     }
@@ -136,14 +139,20 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       $scope.note = note;
     }
 
-
-    $scope.exportCSD = function(note) {
+    $scope.getCSD = function() {
       var csd = "<CsoundSynthesizer>\n<CsInstruments>\n"
       csd += $scope.orcTextEditor.getValue();
       csd += "\n</CsInstruments>\n<CsScore>\n"
-      csd += $scope.scoTextEditor.getValue();
-      csd += "\n</CsScore>\n<CsoundSynthesizer>\n"
-        
+      if(!$scope.note.livesco) {
+        csd += $scope.scoTextEditor.getValue();
+      }
+      csd += "\n</CsScore>\n</CsoundSynthesizer>\n"
+
+      return csd;
+    }
+
+    $scope.exportCSD = function(note) {
+      var csd = $scope.getCSD();        
       var blob = new Blob([csd], {type: "text/plain;charset=utf-8"});
 
       var name = $scope.note.title.trim();
@@ -216,6 +225,26 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
       evt.preventDefault();
     };
 
+    $scope.togglePlay = function(){
+      if(!playing) {
+        if(started) csound.Play();
+        else {
+          csound.Play();
+          csound.CompileOrc($scope.note.orc + "\n");
+          if(!$scope.note.livesco) {
+            csound.ReadScore($scope.note.sco + "\n");
+          }
+          started = true;
+        }
+        document.getElementById('playButton').innerText = "Pause";
+        playing = true;
+      } else {
+        csound.Pause()
+          document.getElementById('playButton').innerText ="Play";
+        playing = false;
+      }
+    }
+
     $scope.selectTab = function(evt) {
       var buttons = $('#editorButtons').children(".btn");
       var panes = $('#editorPanes').children();
@@ -231,6 +260,7 @@ notebookControllers.controller('NotebooksController', ['$scope','$http',
           $(panes[i]).css("display", "none");
         }
       }
+      $scope.scoActive = $('#scoEditor').css('display') == 'block';
     }
 
     //window.onbeforeunload = function() { 
@@ -266,13 +296,20 @@ notebookControllers.controller('NoteController', ['$scope','$http',
       $scope.note = n;
     }
 
-    $scope.exportCSD = function(note) {
+    $scope.getCSD = function() {
       var csd = "<CsoundSynthesizer>\n<CsInstruments>\n"
       csd += $scope.orcTextEditor.getValue();
       csd += "\n</CsInstruments>\n<CsScore>\n"
-      csd += $scope.scoTextEditor.getValue();
-      csd += "\n</CsScore>\n<CsoundSynthesizer>\n"
-        
+      if(!$scope.note.livesco) {
+        csd += $scope.scoTextEditor.getValue();
+      }
+      csd += "\n</CsScore>\n</CsoundSynthesizer>\n"
+
+      return csd;
+    }
+
+    $scope.exportCSD = function(note) {
+      var csd = $scope.getCSD();        
       var blob = new Blob([csd], {type: "text/plain;charset=utf-8"});
 
       var name = $scope.note.title.trim();
@@ -308,6 +345,26 @@ notebookControllers.controller('NoteController', ['$scope','$http',
       evt.preventDefault();
     };
 
+    $scope.togglePlay = function(){
+      if(!playing) {
+        if(started) csound.Play();
+        else {
+          csound.Play();
+          csound.CompileOrc($scope.note.orc + "\n");
+          if(!$scope.note.livesco) {
+            csound.ReadScore($scope.note.sco + "\n");
+          }
+          started = true;
+        }
+        document.getElementById('playButton').innerText = "Pause";
+        playing = true;
+      } else {
+        csound.Pause()
+          document.getElementById('playButton').innerText ="Play";
+        playing = false;
+      }
+    }
+
     $scope.selectTab = function(evt) {
       var buttons = $('#editorButtons').children(".btn");
       var panes = $('#editorPanes').children();
@@ -323,6 +380,7 @@ notebookControllers.controller('NoteController', ['$scope','$http',
           $(panes[i]).css("display", "none");
         }
       }
+      $scope.scoActive = $('#scoEditor').css('display') == 'block';
     }
 
   }]);

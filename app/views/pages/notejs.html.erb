@@ -31,6 +31,11 @@
           <button id="playButton" type="button" class="btn btn-primary btn-sm" ng-click="togglePlay()">Play</button>
           <button id="evalButton" type="button" class="btn btn-primary btn-sm" ng-click="evalCsoundCode()">Evaluate</button>
         </div>
+
+        <div id="scoreOptions" ng-show="scoActive">
+          <input type="checkbox" ng-model="note.livesco"/> Live Score
+        </div>
+        
       </div>
 
       <div id="editorPanes">

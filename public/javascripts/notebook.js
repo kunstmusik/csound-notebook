@@ -16,7 +16,7 @@ function moduleDidLoad() {
 
 }
 function attachListeners() { 
-  document.getElementById('playButton').addEventListener('click', togglePlay);
+  //document.getElementById('playButton').addEventListener('click', togglePlay);
   //document.getElementById('evalButton').addEventListener('click', evalCode);
 //  document.getElementById('files').addEventListener('change', handleFileSelect, false);
   //$("html").keydown(function() {
