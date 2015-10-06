@@ -30,8 +30,8 @@ var csound = (function() {
     var model = document.createElement('embed');
     model.setAttribute('name', 'csound_module');
     model.setAttribute('id', 'csound_module');
-    model.setAttribute('path', '/pnacl/Release');
-    model.setAttribute('src', '/pnacl/Release/csound.nmf');
+    model.setAttribute('path', 'pnacl/Release');
+    model.setAttribute('src', 'pnacl/Release/csound.nmf');
     var mimetype = 'application/x-pnacl';
     model.setAttribute('type', mimetype);
     var csoundhook = document.getElementById('engine');
@@ -186,6 +186,14 @@ var csound = (function() {
    */
   function Pause() {
    csound.module.postMessage('pauseCsound');
+  }
+  
+  /**
+   * Stops rendering and resets Csound.
+   */
+  function Stop() {
+      destroyModule();
+      createModule();
   }
 
   /**
@@ -450,7 +458,10 @@ var csound = (function() {
    }
 
    function input_fail(e) {
-    csound.logMessage("Input audio error: " + e);
+        csound.logMessage("Input audio error: " + e);
+   }
+   function message(text) {
+       csound.logMessage(text);
    }
 
   /**
@@ -493,13 +504,21 @@ var csound = (function() {
     ControlChange : ControlChange,
     ProgramChange : ProgramChange,
     Aftertouch : Aftertouch,
-    PitchBend : PitchBend   
+    PitchBend : PitchBend,
+    // Common JavaScript API:
+    // Should be the same signatures in csound.node, Csound for PNaCl, Csound for Android, CsoundQt.
+    compileOrc: CompileOrc,
+    message: message,
+    perform: Play,
+    readScore: ReadScore,
+    setControlChannel: SetChannel,
+    setStringChannel: SetStringChannel,
+    stop: Stop
   };
 
 }());
 
 document.addEventListener('DOMContentLoaded', function() {
-
      csound.updateStatus('page loaded');
      if (!(navigator.mimeTypes['application/x-pnacl'] !== undefined)) {
         csound.updateStatus('No support for pNaCl (maybe disabled?)');
