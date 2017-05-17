@@ -1,9 +1,0 @@
-== README
-
-Welcome to the Csound Notebook.  This applications is built using Ruby on Rails for the server-side and AngularJS and Bootstrap on the client-side. 
-
-To get started:
-
-* Run `bundle install` to install all the required gems.
-* Run `rails server` to run the server locally and use http://localhost:3000 to test in the browser.
-

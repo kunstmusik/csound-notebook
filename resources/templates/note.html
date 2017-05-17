@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Csound Notebook</title>
+  </head>
+  <body>
+    
+    <div id="app" class="csound-editor">
+      <div class="container-fluid">
+        <div class="card-deck">
+          <div class="card-block">
+            <h4>Loading Note...</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- scripts and styles -->
+    {% style "/assets/bootstrap/css/bootstrap.min.css" %}
+    {% style "/assets/font-awesome/css/font-awesome.min.css" %}
+    {% style "/css/screen.css" %}
+    {% style "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css" %}
+
+    <script type="text/javascript">
+        var context = "{{servlet-context}}";
+        var csrfToken = "{{csrf-token}}";
+    </script>
+
+    {% script "/assets/jquery/jquery.min.js" %}
+    {% script "/assets/tether/dist/js/tether.min.js" %}
+    {% script "/assets/bootstrap/js/bootstrap.min.js" %}
+    {% script "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js" %}
+    {% script "/javascripts/Blob.js" %}
+    {% script "/javascripts/FileSaver.js" %}
+    {% script "/javascripts/libcsound.js" %}
+    {% script "/js/app.js" %}
+  </body>
+</html>
+
+
+
+

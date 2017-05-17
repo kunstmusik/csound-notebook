@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Csound Notebook</title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-toggleable-xs navbar-light bg-faded">  
+      <!-- TOGGLE BUTTON -->
+      <button class="navbar-toggler navbar-toggler-right" 
+              type="button" 
+              data-toggle="collapse" 
+              data-target="#navbarNavAltMarkup" 
+              aria-controls="navbarNavAltMarkup" 
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- BRAND -->
+      <a class="navbar-brand" href="/index.html">Csound Notebook</a>
+
+      <!-- LINKS -->
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/about.html">About</a> 
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/notebook.html">My Notebook</a> 
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+
+
+    <!-- scripts and styles -->
+    {% style "/assets/bootstrap/css/bootstrap.min.css" %}
+    {% style "/assets/font-awesome/css/font-awesome.min.css" %}
+    {% style "/css/screen.css" %}
+
+    <script type="text/javascript">
+var context = "{{servlet-context}}";
+var csrfToken = "{{csrf-token}}";
+    </script>
+
+    {% script "/assets/jquery/jquery.min.js" %}
+    {% script "/assets/tether/dist/js/tether.min.js" %}
+    {% script "/assets/bootstrap/js/bootstrap.min.js" %}
+
+  </body>
+</html>
