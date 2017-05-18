@@ -47,7 +47,6 @@
                  "\n</CsInstruments>\n<CsScore>\n"
                  sco 
                  "\n</CsScore>\n</CsoundSynthesizer>\n")]
-      (log csd) 
       csd
     )))
 

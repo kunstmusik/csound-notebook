@@ -9,9 +9,21 @@
   (compile-orc [cs orc-text])
   (compile-sco [cs sco-text]))
 
+;; SCRIPT LOADING FUNCTION
+
+(defn load-script!
+  [script-file callback]
+  (let [script (.createElement js/document "script")] 
+    (aset script "src" script-file)
+    (when callback
+      (aset script "onload" callback))
+    (-> (.-body js/document)
+        (.appendChild script))
+    ))
+
 ;; EMSCRIPTEN CSOUND LOADING
 
-(defn set-emscripten-callbacks 
+(defn- finish-emscripten-load! 
   []
   (let [csout (.getElementById js/document "console-text") 
         append (fn [t] 
@@ -38,14 +50,9 @@
   
   (.log js/console "Loaded Emscripten CsoundObj"))
 
-(defn load-emscripten!  
-  []
-  (let [script (.createElement js/document "script")] 
-    (aset script "src" "/javascripts/libcsound.js")
-    (aset script "onload" set-emscripten-callbacks)
-    (-> (.-body js/document)
-        (.appendChild script))
-    ))
+(defn load-emscripten! []
+  (.log js/console "Loading Emscripten CsoundObj...")
+  (load-script! "/javascripts/libcsound.js" finish-emscripten-load!))
 
 
 ;; PNACL
@@ -59,6 +66,5 @@
 (defn load-csound! []
   (if (aget js/navigator.mimeTypes "application/x-pnacl" )
     (load-pnacl!) 
-    (load-emscripten!)
-    ))
+    (load-emscripten!)))
 
