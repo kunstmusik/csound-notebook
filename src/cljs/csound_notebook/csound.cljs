@@ -48,7 +48,7 @@
           (compile-sco [_ sco-text] (.readScore cs sco-text)))))  
    500) 
   
-  (.log js/console "Loaded Emscripten CsoundObj"))
+  (.log js/console "Finished Loading Emscripten CsoundObj."))
 
 (defn load-emscripten! []
   (.log js/console "Loading Emscripten CsoundObj...")
@@ -57,9 +57,49 @@
 
 ;; PNACL
 
+
+(defn create-module
+  []
+  (let [module (.createElement js/document "embed")] 
+    (.setAttribute module"name" "csound_module")
+    (.setAttribute module"id" "csound_module")
+    (.setAttribute module "path" "/Release")
+    (.setAttribute module "src" "/Release/csound.nmf")
+    (.setAttribute module "type" "application/x-pnacl")
+    (-> (.-body js/document)
+        (.appendChild module))
+    module))
+
+(def counter (atom 0))
+
+(defn progress-handler
+  [evt]
+  (if (and (aget evt "lengthComputable") 
+           (pos? (aget evt "total")))
+    (let [percent (* 100.0 (/ (aget evt "loaded") (aget evt "total")))]
+      (.log js/console (str "Loading: " percent " %")))
+    (.log js/console (str "Loading: (count=" (swap! counter inc) ")"))))
+
+
+(defn finish-pnacl [module]
+  (.log js/console "Finished Loading PNACL Csound.")
+  (reset! 
+      csoundObj
+      (reify CsoundEngine
+        (start-engine [_ csd-text]
+          (.postMessage module (str "csd:" csd-text)))
+        (stop-engine [_] (.log js/console "stop-engine not implemented"))       
+        (reset-engine [_] (.log js/console "reset-engine not implemented"))       
+        (compile-orc [_ orc-text] (.postMessage module (str "orchestra:" orc-text)))
+        (compile-sco [_ sco-text] (.postMessage module (str "score:" sco-text)))))
+  )
+
 (defn load-pnacl!
   []
-  (.log js/console "PNACL"))
+  (.log js/console "Loading PNACL Csound...")
+  (let [module (create-module)] 
+    (.addEventListener module "progress" progress-handler true)
+    (.addEventListener module "load" (partial finish-pnacl module) true)))
 
 ;; LOAD CSOUND
 
