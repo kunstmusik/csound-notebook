@@ -10,43 +10,22 @@
             [csound-notebook.handlers]
             [csound-notebook.subscriptions :as s]
             [csound-notebook.db :as db]
+            [csound-notebook.csound :as cs]
             [cljs.pprint :refer [pprint]]
             )
   (:import goog.History))
 
 (defn log [s] (.log js/console s))
 
-(def csoundObj (atom nil))
-
-;; CSOUND LOADING
-
-(defn set-emscripten-callbacks []
-(let [csout (.getElementById js/document "console-text") 
-      append (fn [t] 
-                (aset csout "value" 
-                      (str (aget csout "value") t "\n")))]  
-  (aset js/Module "print" append) 
-  (aset js/Module "printErr" append)))
-
-(defn load-csound! []
-  (if (aget js/navigator.mimeTypes "application/x-pnacl" )
-    (log "PNACL")
-    (let [script (.createElement js/document "script")] 
-      (aset script "src" "/javascripts/libcsound.js")
-      (aset script "onload" set-emscripten-callbacks)
-      (-> (.-body js/document)
-          (.appendChild script))
-      )))
-
 ;; ORC/SCO LIVE EVALUATION
 
 (defn eval-orc [orc]
-  (when-let [cs @csoundObj]
-    (.evaluateCode cs orc)))
+  (when-let [cs-obj @cs/csoundObj]
+    (cs/compile-orc cs-obj orc)))
 
 (defn eval-sco [sco]
-  (when-let [cs @csoundObj]
-    (.readScore cs sco)))
+  (when-let [cs-obj @cs/csoundObj]
+    (cs/compile-sco cs-obj sco)))
 
 (defn eval-code [eval-type cm]
   (when-let [selection (.getSelection cm)]
@@ -83,13 +62,8 @@
     (js/saveAs blob file-name)))
 
 (defn handle-play [e]
-  (when-not @csoundObj
-    (reset! csoundObj (js/CsoundObj.)))
-  (let [csd (get-csd)
-        cs @csoundObj]
-    (.writeFile js/FS "/temp.csd" csd (js-obj {"encoding" "utf8"}))
-    (.compileCSD cs "/temp.csd")
-    (.start cs)))
+  (when-let [cs-obj @cs/csoundObj]
+    (cs/start-engine cs-obj (get-csd))))
 
 (defn handle-eval [e])
 (defn handle-save [e])
@@ -249,7 +223,7 @@
 
 (defn init! []
   (rf/dispatch-sync [:initialize-db])
-  (load-csound!)
+  (cs/load-csound!)
   (load-interceptors!)
   ;(fetch-docs!)
   (hook-browser-navigation!)
