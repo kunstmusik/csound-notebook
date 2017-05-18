@@ -1,0 +1,12 @@
+{
+  "program": {
+    "portable": {
+      "pnacl-translate": {
+        "url": "csound.pexe"
+      },
+      "pnacl-debug": {
+        "url": "csound_unstripped.bc"
+      }
+    }
+  }
+}
