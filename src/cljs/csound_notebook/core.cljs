@@ -18,6 +18,25 @@
 
 (def csoundObj (atom nil))
 
+;; CSOUND LOADING
+
+(defn set-emscripten-callbacks []
+(let [csout (.getElementById js/document "console-text") 
+      append (fn [t] 
+                (aset csout "value" 
+                      (str (aget csout "value") t "\n")))]  
+  (aset js/Module "print" append) 
+  (aset js/Module "printErr" append)))
+
+(defn load-csound! []
+  (if (aget js/navigator.mimeTypes "application/x-pnacl" )
+    (log "PNACL")
+    (let [script (.createElement js/document "script")] 
+      (aset script "src" "/javascripts/libcsound.js")
+      (aset script "onload" set-emscripten-callbacks)
+      (-> (.-body js/document)
+          (.appendChild script))
+      )))
 
 ;; ORC/SCO LIVE EVALUATION
 
@@ -30,7 +49,6 @@
     (.readScore cs sco)))
 
 (defn eval-code [eval-type cm]
-  (log (.getSelection cm))
   (when-let [selection (.getSelection cm)]
     (if (= :orc eval-type)
       (eval-orc selection)
@@ -185,8 +203,8 @@
        [sco-editor @n]])
 
     [:div.tab-pane.csound-editor {:id "console" :role "tabpanel"}  
-     [:textarea.csound-editor
-      {:style {:width "100%" :height "100%"}}
+     [:textarea.csound-editor 
+      {:id "console-text" :style {:width "100%" :height "100%"}}
       ]]
     [:div.tab-pane {:id "help" :role "tabpanel"}
      "help"
@@ -231,6 +249,7 @@
 
 (defn init! []
   (rf/dispatch-sync [:initialize-db])
+  (load-csound!)
   (load-interceptors!)
   ;(fetch-docs!)
   (hook-browser-navigation!)
