@@ -2,10 +2,12 @@
   (:require [compojure.core :refer [routes wrap-routes]]
             [csound-notebook.layout :refer [error-page]]
             [csound-notebook.routes.home :refer [home-routes]]
+            [csound-notebook.routes.user :refer [user-routes]]
             [compojure.route :as route]
             [csound-notebook.env :refer [defaults]]
             [mount.core :as mount]
-            [csound-notebook.middleware :as middleware]))
+            [csound-notebook.middleware :as middleware]
+            ))
 
 (mount/defstate init-app
                 :start ((or (:init defaults) identity))
@@ -13,7 +15,7 @@
 
 (def app-routes
   (routes
-    (-> #'home-routes
+    (-> (routes #'home-routes #'user-routes)
         (wrap-routes middleware/wrap-csrf)
         (wrap-routes middleware/wrap-formats))
     (route/not-found
