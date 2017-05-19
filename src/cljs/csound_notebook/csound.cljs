@@ -94,10 +94,17 @@
         (compile-sco [_ sco-text] (.postMessage module (str "score:" sco-text)))))
   )
 
+(defn pnacl-message-handler 
+  [evt] 
+  (let [csout (.getElementById js/document "console-text")]  
+    (aset csout "value" 
+          (str (aget csout "value") (.-data evt)))))
+
 (defn load-pnacl!
   []
   (.log js/console "Loading PNACL Csound...")
   (let [module (create-module)] 
+    (.addEventListener module "message" pnacl-message-handler true)
     (.addEventListener module "progress" progress-handler true)
     (.addEventListener module "load" (partial finish-pnacl module) true)))
 

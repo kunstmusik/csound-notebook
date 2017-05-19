@@ -166,7 +166,7 @@
                     "Help" ]]]
 
    [:div.container-fluid.tab-content
-    {:style {:height "calc(100% - 52px)"}}
+    {:style {:height "calc(100% - 104px)"}}
     ;[:pre  (with-out-str  (pprint @re-frame.db/app-db))]
     (when-let [n (rf/subscribe [:note]) ]
       [:div.tab-pane.csound-editor.active {:id "orc" :role "tabpanel"} 
