@@ -13,16 +13,10 @@
 (defn about-page []
   (md-page "docs/about.md"))
 
-(defn note-page [req]
-  (layout/render "note.html"))
-
 
 (defroutes home-routes
   (GET "/" req 
        (home-page req))
-
-  (GET "/note" req 
-       (note-page req))
 
   (GET "/about" [] 
        (about-page))

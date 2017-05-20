@@ -37,22 +37,23 @@
       (assoc :session (assoc session :identity))))
 
 (defroutes user-routes
-  (context "/user" []
-           (GET "/login" req 
-                (login-page req))
+  (context 
+    "/user" []
+    (GET "/login" req 
+         (login-page req))
 
-           (GET "/logout" req 
-                (handle-logout req))
+    (GET "/logout" req 
+         (handle-logout req))
 
-           (POST "/login" req 
-                 (handle-login req))
+    (POST "/login" req 
+          (handle-login req))
 
-           (GET "/register" req 
-                (register-page req))
+    (GET "/register" req 
+         (register-page req))
 
-           (POST "/register" req
-                 (handle-register req))
+    (POST "/register" req
+          (handle-register req))
 
-           (GET "/reset" []
-                (reset-page))
-           ))
+    (GET "/reset" []
+         (reset-page))
+    ))
