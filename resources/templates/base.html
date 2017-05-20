@@ -7,32 +7,8 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-toggleable-xs navbar-light bg-faded">  
-      <!-- TOGGLE BUTTON -->
-      <button class="navbar-toggler navbar-toggler-right" 
-              type="button" 
-              data-toggle="collapse" 
-              data-target="#navbarNavAltMarkup" 
-              aria-controls="navbarNavAltMarkup" 
-              aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
 
-      <!-- BRAND -->
-      <a class="navbar-brand" href="/index.html">Csound Notebook</a>
-
-      <!-- LINKS -->
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/about.html">About</a> 
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/notebook.html">My Notebook</a> 
-          </li>
-        </ul>
-      </div>
-    </nav>
+    {% include "nav.html" %}
 
     <div class="container">
       {% block content %}
