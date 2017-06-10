@@ -1,5 +1,6 @@
 (ns csound-notebook.routes.user
   (:require [csound-notebook.layout :as layout]
+            [csound-notebook.db.core :as db]
             [compojure.core :refer [defroutes GET POST context]]
             [ring.util.http-response :as response]
             [clojure.java.io :as io]
@@ -21,9 +22,11 @@
   (layout/render "reset.html"))
 
 
-(defn handle-login [{session :session :as req}]
-  (-> (response/found "/")
-      (assoc :session (assoc session :identity {:name "Steven"}))))
+(defn handle-login [{:keys [session form-params] :as req}]
+  (if-let [user (db/get-user {:email (form-params "email")})]
+    (-> (response/found "/")
+      (assoc :session (assoc session :identity user)))
+    (layout/render "login.html")))
 
 (defn handle-logout [{session :session}]
   (-> (response/found "/")
