@@ -24,20 +24,28 @@
 
 (defn handle-login [{:keys [session form-params] :as req}]
   (if-let [user (db/get-user {:email (form-params "email")})]
-    (-> (response/found "/")
-      (assoc :session (assoc session :identity user)))
+    (if (hashers/check (form-params "password") (:pass user)) 
+      (-> (response/found "/")
+          (assoc :session (assoc session :identity user)))
+      (layout/render "login.html"))
     (layout/render "login.html")))
 
 (defn handle-logout [{session :session}]
   (-> (response/found "/")
       (assoc :session (dissoc session :identity))))
 
-(defn handle-register [{session :session :as req}]
-  (let [params (:params req)]
-     
-    )
-  (-> (response/found "/")
-      (assoc :session (assoc session :identity))))
+
+;; TODO - validation
+(defn handle-register [{:keys [session form-params] :as req}]
+  (if-let [user (db/get-user {:email (form-params "email")})]
+    (layout/render "register.html")
+    (let [user {:email (form-params "email")
+                :pass (hashers/encrypt (form-params "password"))
+                :username (form-params "username")
+                }]
+      (db/create-user! user)
+      (-> (response/found "/")
+          (assoc :session (assoc session :identity user))))))
 
 (defroutes user-routes
   (context 
