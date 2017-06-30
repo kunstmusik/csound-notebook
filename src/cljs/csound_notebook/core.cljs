@@ -33,6 +33,11 @@
       (eval-orc selection)
       (eval-sco selection))))
 
+;; HELP
+
+(defn show-help []
+  (js/alert "Help content not yet available."))
+
 ;; CSD 
 
 (defn get-csd 
@@ -124,34 +129,31 @@
 (defn home-page []
   [:div.csound-editor
    [:div.btn-toolbar {:role "toolbar"}
-    ;[:div.btn-group.btn-group-sm.mr-2 {:role "group"}
-    ; [:button.btn.btn-default.active 
-    ;  {:data-toggle "tab" :href "#orc" :type "button"} 
-    ;  "ORC"]
-    ; [:button.btn.btn-default 
-    ;  {:data-toggle "tab" :href "#sco" :type "button"} 
-    ;  "SCO"]
-    ; [:button.btn.btn-default 
-    ;  {:data-toggle "tab" :href "#console" :type "button"} 
-    ;  "Console"]
-    ; [:button.btn.btn-default 
-    ;  {:data-toggle "tab" :href "#help" :type "button"} 
-    ;  "Help"]
-    ; ]
+    [:div.btn-group.btn-group-sm.mr-2 {:role "group"}
+     [:button.btn.btnsecondary {:type "button" :on-click handle-play} 
+      [:i {:class "fa fa-play" :aria-hidden "true"}] " Play"]
+     [:button.btn.btnsecondary {:type "button" :on-click handle-eval} 
+      [:i {:class "fa fa-repeat" :aria-hidden "true"}] " Evaluate"]
+     [:button.btn.btnsecondary {:type "button" :on-click handle-save} 
+      [:i {:class "fa fa-floppy-o" :aria-hidden "true"}] " Save"]
+     [:button.btn.btnsecondary {:type "button" :on-click handle-delete} 
+      [:i {:class "fa fa-trash" :aria-hidden "true"}] " Delete"]
+     ]
+    
     [:div.btn-group.btn-group-sm.mr-2 {:role "group"}
      [:button.btn.btn-default 
       {:type "button" :on-click handle-export-csd} 
-      "Download CSD"] 
+      [:i {:class "fa fa-cloud-download" :aria-hidden "true"}] " Download CSD"] 
      ]
-    [:div.btn-group.btn-group-sm {:role "group"}
-     [:button.btn.btnsecondary {:type "button" :on-click handle-play} "Play"]
-     [:button.btn.btnsecondary {:type "button" :on-click handle-eval} "Evaluate"]
-     [:button.btn.btnsecondary {:type "button" :on-click handle-save} "Save"]
-     [:button.btn.btnsecondary {:type "button" :on-click handle-delete} "Delete"]
+
+    [:div.btn-group.btn-group-sm.mr-2 {:role "group"}
+     [:button.btn.btn-default 
+      {:type "button" :on-click show-help} 
+      [:i {:class "fa fa-info-circle" :aria-hidden "true"}] " Help"] 
      ]
     ]
 
-    [:ul.nav.nav-tabs {:role "tablist"}
+    [:ul.nav.nav-tabs 
      [:li.nav-item [:a.nav-link.active 
                     {:data-toggle "tab" :href "#orc" :role "tab" }  
                     "ORC"]]
@@ -161,9 +163,7 @@
      [:li.nav-item [:a.nav-link 
                     {:data-toggle "tab" :href "#console" :role "tab" } 
                     "Console"]]
-     [:li.nav-item [:a.nav-link 
-                    {:data-toggle "tab" :href "#help" :role "tab" }
-                    "Help" ]]]
+     ]
 
    [:div.container-fluid.tab-content
     {:style {:height "calc(100% - 104px)"}}
@@ -172,16 +172,13 @@
       [:div.tab-pane.csound-editor.active {:id "orc" :role "tabpanel"} 
        [orc-editor @n]])
     (when-let [n (rf/subscribe [:note]) ]
-      [:div.tab-pane.csound-editor {:id "sco" :role "tabpanel"}  
+      [:div.tab-pane.csound-editor.active {:id "sco" :role "tabpanel"}  
        [sco-editor @n]])
 
     [:div.tab-pane.csound-editor {:id "console" :role "tabpanel"}  
      [:textarea.csound-editor 
       {:id "console-text" :style {:width "100%" :height "100%"}}
       ]]
-    [:div.tab-pane {:id "help" :role "tabpanel"}
-     "help"
-     ]
     ]]
   
   )
