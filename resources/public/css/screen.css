@@ -4,7 +4,7 @@ body {
     height: 100%;
 }
 .navbar {
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
   border-radius: 0px;
 }
 .navbar-brand {
@@ -67,7 +67,7 @@ body {
     }
 }
 
-.csound-editor {
-  height: 100%;
-  min-height: 100%;
-}
+/*.csound-editor {*/
+/*  height: 100%;*/
+/*  min-height: 100%;*/
+/*}*/

@@ -82,12 +82,13 @@
                               (r/dom-node this)
                               #js  {:mode "javascript"
                                     :lineNumbers true
+                                    :autofocus false 
                                     })]
       (.setSize cm "100%" "100%")
       (.setOption cm "extraKeys"
                   (js-obj "Ctrl-E" (partial eval-code :orc)))
       ;(.on cm "change" #(reset! input  (.getValue %)))
-      
+      (.refresh cm) 
       ))) 
 
 (defn orc-editor  [input]
@@ -104,12 +105,13 @@
                               (r/dom-node this)
                               #js  {:mode "javascript"
                                     :lineNumbers true
+                                    :autofocus false 
                                     })]
       (.setSize cm "100%" "100%")
       (.setOption cm "extraKeys"
                   (js-obj "Ctrl-E" (partial eval-code :sco)))
       ;(.on cm "change" #(reset! input  (.getValue %)))
-      
+      (.refresh cm) 
       ))) 
 
 (defn sco-editor  [input]
@@ -127,31 +129,7 @@
     (.tab this "show")))
 
 (defn home-page []
-  [:div.csound-editor
-   [:div.btn-toolbar {:role "toolbar"}
-    [:div.btn-group.btn-group-sm.mr-2 {:role "group"}
-     [:button.btn.btnsecondary {:type "button" :on-click handle-play} 
-      [:i {:class "fa fa-play" :aria-hidden "true"}] " Play"]
-     [:button.btn.btnsecondary {:type "button" :on-click handle-eval} 
-      [:i {:class "fa fa-repeat" :aria-hidden "true"}] " Evaluate"]
-     [:button.btn.btnsecondary {:type "button" :on-click handle-save} 
-      [:i {:class "fa fa-floppy-o" :aria-hidden "true"}] " Save"]
-     [:button.btn.btnsecondary {:type "button" :on-click handle-delete} 
-      [:i {:class "fa fa-trash" :aria-hidden "true"}] " Delete"]
-     ]
-    
-    [:div.btn-group.btn-group-sm.mr-2 {:role "group"}
-     [:button.btn.btn-default 
-      {:type "button" :on-click handle-export-csd} 
-      [:i {:class "fa fa-cloud-download" :aria-hidden "true"}] " Download CSD"] 
-     ]
-
-    [:div.btn-group.btn-group-sm.mr-2 {:role "group"}
-     [:button.btn.btn-default 
-      {:type "button" :on-click show-help} 
-      [:i {:class "fa fa-info-circle" :aria-hidden "true"}] " Help"] 
-     ]
-    ]
+  [:div.container-fluid.h-100
 
     [:ul.nav.nav-tabs 
      [:li.nav-item [:a.nav-link.active 
@@ -165,30 +143,49 @@
                     "Console"]]
      ]
 
-   [:div.container-fluid.tab-content
-    {:style {:height "calc(100% - 104px)"}}
+   [:div.tab-content.h-100.w-100
+    ;{:style {:height "calc(100% - 104px)"}}
     ;[:pre  (with-out-str  (pprint @re-frame.db/app-db))]
     (when-let [n (rf/subscribe [:note]) ]
-      [:div.tab-pane.csound-editor.active {:id "orc" :role "tabpanel"} 
+      [:div.tab-pane.h-100.active {:id "orc" :role "tabpanel"} 
        [orc-editor @n]])
     (when-let [n (rf/subscribe [:note]) ]
-      [:div.tab-pane.csound-editor.active {:id "sco" :role "tabpanel"}  
+      [:div.tab-pane.h-100 {:id "sco" :role "tabpanel"}  
        [sco-editor @n]])
 
-    [:div.tab-pane.csound-editor {:id "console" :role "tabpanel"}  
-     [:textarea.csound-editor 
-      {:id "console-text" :style {:width "100%" :height "100%"}}
+    [:div.tab-pane.h-100 {:id "console" :role "tabpanel"}  
+     [:textarea.h-100
+      {:id "console-text" :style {:width "100%"}}
       ]]
     ]]
   
   )
 
+(defn top-nav []
+  [:ul.navbar-nav.mr-auto 
+     [:li.nav-item
+      [:a.nav-link {:on-click handle-play}
+       [:i.fa.fa-play {:aria-hidden "true"}] " Play"]]
+     [:li.nav-item  
+      [:a.nav-link {:on-click handle-eval}
+       [:i.fa.fa-repeat {:aria-hidden "true"}] " Evaluate"]]
+     [:li.nav-item  
+      [:a.nav-link {:on-click handle-save}
+       [:i.fa.fa-floppy-o {:aria-hidden "true"}] " Save"]]
+     [:li.nav-item  
+      [:a.nav-link {:on-click handle-export-csd}
+       [:i.fa.fa-cloud-download {:aria-hidden "true"}] " Download CSD"]]
+     [:li.nav-item  
+      [:a.nav-link {:on-click show-help}
+       [:i.fa.fa-info-circle {:aria-hidden "true"}] " Help"]]
+     ])
+
 (def pages
   {:home #'home-page })
 
 (defn page []
-  [:div.csound-editor
-   [(pages @(rf/subscribe [:page]))]])
+  [(pages @(rf/subscribe [:page]))]
+  )
 
 ;; -------------------------
 ;; Routes
@@ -215,7 +212,9 @@
 
 (defn mount-components []
   (rf/clear-subscription-cache!)
-  (r/render [#'page] (.getElementById js/document "app")))
+  (r/render [#'page] (.getElementById js/document "app"))
+  (r/render [#'top-nav] (.getElementById js/document "navbarNavAltMarkup")) 
+  )
 
 (defn init! []
   (rf/dispatch-sync [:initialize-db])
