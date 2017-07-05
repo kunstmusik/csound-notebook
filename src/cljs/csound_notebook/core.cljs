@@ -27,11 +27,6 @@
   (when-let [cs-obj @cs/csoundObj]
     (cs/compile-sco cs-obj sco)))
 
-(defn eval-code [eval-type cm]
-  (when-let [selection (.getSelection cm)]
-    (if (= :orc eval-type)
-      (eval-orc selection)
-      (eval-sco selection))))
 
 ;; HELP
 
@@ -60,7 +55,7 @@
 (defn handle-export-csd [e]
   (let [note @(rf/subscribe [:note])
         csd (get-csd (:livesco note))
-        blob (js/Blob. [csd] (js-obj {"type" "text/plain;charset=utf-8"}))
+        blob (js/Blob. #js [csd] (js-obj {"type" "text/plain;charset=utf-8"}))
         csd-name (:title note) 
         file-name (str (clojure.string/replace csd-name #" " "_") ".csd")]
     (js/saveAs blob file-name)))
@@ -69,8 +64,15 @@
   (when-let [cs-obj @cs/csoundObj]
     (cs/start-engine cs-obj (get-csd))))
 
-(defn handle-eval [e])
-(defn handle-save [e])
+(defn handle-eval [e]
+  (let [orc-ed ((js* "$") "csoundOrcEditor")
+        sco-ed ((js* "$") "csoundScoEditor")])
+  ;(log (.-visible orc-ed))
+  ;(log (.-visible sco-ed))
+  )
+(defn handle-save [e]
+  (.replaceState js/history "" "Csound: Note abcdfeg" "abcdfeg")
+  )
 (defn handle-delete [e])
 
 
@@ -83,17 +85,17 @@
                               #js  {:mode "javascript"
                                     :lineNumbers true
                                     :autofocus false 
+                                    :autoRefresh true
                                     })]
       (.setSize cm "100%" "100%")
       (.setOption cm "extraKeys"
-                  (js-obj "Ctrl-E" (partial eval-code :orc)))
+                  (js-obj "Ctrl-E" #(eval-orc (.getSelection cm))))
       ;(.on cm "change" #(reset! input  (.getValue %)))
-      (.refresh cm) 
       ))) 
 
 (defn orc-editor  [input]
   (r/create-class
-    {:render  (fn  []  [:textarea.csound-editor
+    {:render  (fn  []  [:textarea.h-100
                         {:default-value (:orc input) 
                          :auto-complete "off"
                          :id "csoundOrcEditor"}])
@@ -106,17 +108,17 @@
                               #js  {:mode "javascript"
                                     :lineNumbers true
                                     :autofocus false 
+                                    :autoRefresh true
                                     })]
       (.setSize cm "100%" "100%")
       (.setOption cm "extraKeys"
-                  (js-obj "Ctrl-E" (partial eval-code :sco)))
+                  (js-obj "Ctrl-E" #(eval-sco (.getSelection cm))))
       ;(.on cm "change" #(reset! input  (.getValue %)))
-      (.refresh cm) 
       ))) 
 
 (defn sco-editor  [input]
   (r/create-class
-    {:render  (fn  []  [:textarea.csound-editor
+    {:render  (fn  []  [:textarea.h-100
                         {:default-value (:sco input) 
                          :auto-complete "off"
                          :id "csoundScoEditor"}])
@@ -129,9 +131,10 @@
     (.tab this "show")))
 
 (defn home-page []
-  [:div.container-fluid.h-100
 
-    [:ul.nav.nav-tabs 
+  [:div.container-fluid.h-100.mr-auto.clearfix
+
+    [:ul.nav.nav-tabs.row-fluid
      [:li.nav-item [:a.nav-link.active 
                     {:data-toggle "tab" :href "#orc" :role "tab" }  
                     "ORC"]]
@@ -143,8 +146,8 @@
                     "Console"]]
      ]
 
-   [:div.tab-content.h-100.w-100
-    ;{:style {:height "calc(100% - 104px)"}}
+   [:div.tab-content.w-100
+    {:style {:height "calc(100% - 104px)"}}
     ;[:pre  (with-out-str  (pprint @re-frame.db/app-db))]
     (when-let [n (rf/subscribe [:note]) ]
       [:div.tab-pane.h-100.active {:id "orc" :role "tabpanel"} 
@@ -164,19 +167,19 @@
 (defn top-nav []
   [:ul.navbar-nav.mr-auto 
      [:li.nav-item
-      [:a.nav-link {:on-click handle-play}
+      [:a.nav-link {:href "javascript:void(0);" :on-click handle-play}
        [:i.fa.fa-play {:aria-hidden "true"}] " Play"]]
      [:li.nav-item  
-      [:a.nav-link {:on-click handle-eval}
+      [:a.nav-link {:href "javascript:void(0);" :on-click handle-eval}
        [:i.fa.fa-repeat {:aria-hidden "true"}] " Evaluate"]]
      [:li.nav-item  
-      [:a.nav-link {:on-click handle-save}
+      [:a.nav-link {:href "javascript:void(0);"  :on-click handle-save}
        [:i.fa.fa-floppy-o {:aria-hidden "true"}] " Save"]]
      [:li.nav-item  
-      [:a.nav-link {:on-click handle-export-csd}
+      [:a.nav-link {:href "javascript:void(0);" :on-click handle-export-csd}
        [:i.fa.fa-cloud-download {:aria-hidden "true"}] " Download CSD"]]
      [:li.nav-item  
-      [:a.nav-link {:on-click show-help}
+      [:a.nav-link {:href "javascript:void(0);" :on-click show-help}
        [:i.fa.fa-info-circle {:aria-hidden "true"}] " Help"]]
      ])
 

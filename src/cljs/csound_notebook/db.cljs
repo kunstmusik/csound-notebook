@@ -7,7 +7,9 @@
    :sco "i1 0 1 8.00 -12\ni1 0 1 8.04 -12\ni1 0 1 8.07 -12"
    :title "My Note"
    :public false
-   :livesco false })
+   :livesco false 
+   :note-id ""
+   })
 
 
 (def default-db

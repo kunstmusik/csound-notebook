@@ -47,6 +47,10 @@
 (defroutes home-routes
   (GET "/" req 
        (note-page req))
+  (GET "/:note-id" req 
+       (note-page req))
+  (GET "/:user-id/:note-id" req 
+       (note-page req))
 
   (GET "/about" [] 
        (about-page))

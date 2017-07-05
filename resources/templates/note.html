@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <title>Csound Notebook</title>
   </head>
-  <body class="h-100 mh-100">
+  <body style="overflow-y:hidden">
 
     {% include "nav-note.html" %}
     
-    <div id="app" class="h-100">
+    <div id="app" class="h-100 mh-100">
       <div class="container-fluid">
         <div class="card-deck">
           <div class="card-block">
@@ -28,12 +28,14 @@
     <script type="text/javascript">
         var context = "{{servlet-context}}";
         var csrfToken = "{{csrf-token}}";
+        var noteId = "{{note-id}}";
     </script>
 
     {% script "/assets/jquery/jquery.min.js" %}
     {% script "/assets/tether/dist/js/tether.min.js" %}
     {% script "/assets/bootstrap/js/bootstrap.min.js" %}
     {% script "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js" %}
+    {% script "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/addon/display/autorefresh.js" %}
     {% script "/javascripts/Blob.js" %}
     {% script "/javascripts/FileSaver.js" %}
     <!--{% script "/javascripts/libcsound.js" %}-->
