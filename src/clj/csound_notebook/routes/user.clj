@@ -25,8 +25,8 @@
 (defn handle-login [{:keys [session form-params] :as req}]
   (if-let [user (db/get-user {:email (form-params "email")})]
     (if (hashers/check (form-params "password") (:pass user)) 
-      (-> (response/found "/")
-          (assoc :session (assoc session :identity user)))
+      (assoc (response/found "/")
+             :session (assoc session :identity user))
       (layout/render "login.html"))
     (layout/render "login.html")))
 

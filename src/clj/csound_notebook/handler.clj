@@ -17,7 +17,7 @@
 
 (def app-routes
   (routes
-    (-> (routes #'home-routes #'user-routes
+    (-> (routes #'user-routes #'home-routes 
                 #'note-routes #'notebook-routes)
         (wrap-routes middleware/wrap-csrf)
         (wrap-routes middleware/wrap-formats))

@@ -30,7 +30,7 @@
 
 (defn note-page 
   [req]
-  (layout/render "note.html"))
+  (layout/render "note.html" {:logged-in (str (authenticated? req))}))
 
 (defn save-note 
   [req]
@@ -59,6 +59,13 @@
 
 
 (defroutes home-routes
+
+  (GET "/about" [] 
+       (about-page))
+  (GET "/docs" []
+       (-> (response/ok (-> "docs/docs.md" io/resource slurp))
+       (response/header "Content-Type" "text/plain; charset=utf-8"))) 
+
   (GET "/" req 
        (note-page req))
   (GET "/:note-id" req 
@@ -73,9 +80,5 @@
   (POST "/:username/:id" req
         (save-note req))
 
-  (GET "/about" [] 
-       (about-page))
-  (GET "/docs" []
-       (-> (response/ok (-> "docs/docs.md" io/resource slurp))
-       (response/header "Content-Type" "text/plain; charset=utf-8"))))
+  )
 

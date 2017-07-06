@@ -145,11 +145,11 @@
                          :id "csoundScoEditor"}])
      :component-did-mount  (sco-editor-did-mount input)}))
 
-(defn tab-show [e]
-  #_(.preventDefault e)
-  #_(this-as 
-    this
-    (.tab this "show")))
+;(defn tab-show [e]
+;  #_(.preventDefault e)
+;  #_(this-as 
+;    this
+;    (.tab this "show")))
 
 (defn home-page []
 
@@ -187,22 +187,22 @@
 
 (defn top-nav []
   [:ul.navbar-nav.mr-auto 
-     [:li.nav-item
-      [:a.nav-link {:href "javascript:void(0);" :on-click handle-play}
-       [:i.fa.fa-play {:aria-hidden "true"}] " Play"]]
-     [:li.nav-item  
-      [:a.nav-link {:href "javascript:void(0);" :on-click handle-eval}
-       [:i.fa.fa-repeat {:aria-hidden "true"}] " Evaluate"]]
-     [:li.nav-item  
-      [:a.nav-link {:href "javascript:void(0);"  :on-click handle-save}
-       [:i.fa.fa-floppy-o {:aria-hidden "true"}] " Save"]]
-     [:li.nav-item  
-      [:a.nav-link {:href "javascript:void(0);" :on-click handle-export-csd}
-       [:i.fa.fa-cloud-download {:aria-hidden "true"}] " Download CSD"]]
-     [:li.nav-item  
-      [:a.nav-link {:href "javascript:void(0);" :on-click show-help}
-       [:i.fa.fa-info-circle {:aria-hidden "true"}] " Help"]]
-     ])
+   [:li.nav-item
+    [:a.nav-link {:href "javascript:void(0);" :on-click handle-play}
+     [:i.fa.fa-play {:aria-hidden "true"}] " Play"]]
+   [:li.nav-item  
+    [:a.nav-link {:href "javascript:void(0);" :on-click handle-eval}
+     [:i.fa.fa-repeat {:aria-hidden "true"}] " Evaluate"]]
+   [:li.nav-item  
+    [:a.nav-link {:href "javascript:void(0);"  :on-click handle-save}
+     [:i.fa.fa-floppy-o {:aria-hidden "true"}] " Save"]]
+   [:li.nav-item  
+    [:a.nav-link {:href "javascript:void(0);" :on-click handle-export-csd}
+     [:i.fa.fa-cloud-download {:aria-hidden "true"}] " Download CSD"]]
+   [:li.nav-item  
+    [:a.nav-link {:href "javascript:void(0);" :on-click show-help}
+     [:i.fa.fa-info-circle {:aria-hidden "true"}] " Help"]]
+   ])
 
 (def pages
   {:home #'home-page })
