@@ -1,8 +1,11 @@
 (ns csound-notebook.routes.home
   (:require [csound-notebook.layout :as layout]
+            [csound-notebook.db.core :as db]
             [compojure.core :refer [defroutes GET POST]]
             [ring.util.http-response :as response]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [buddy.auth :refer [authenticated?]]
+            ))
 
 ;; Note pages
 
@@ -31,7 +34,18 @@
 
 (defn save-note 
   [req]
-  {:body {:note_id "12345678"}})
+  (if-let [p (:params req)]
+   (let [note-id (gen-note-id)]
+     (db/create-note! {:orc (:orc p)
+                     :sco (:sco p)
+                     :note-id note-id 
+                     :is-live false
+                     :is-public false
+                     :user-id nil  
+                     })
+      {:body {:noteId note-id}}   
+     ) 
+   (:body {:error "Invalid Parameters."})))
 
 
 (defn md-page [md-file]
@@ -51,6 +65,13 @@
        (note-page req))
   (GET "/:user-id/:note-id" req 
        (note-page req))
+
+  (POST "/" req
+        (save-note req))
+  (POST "/:id" req
+        (save-note req))
+  (POST "/:username/:id" req
+        (save-note req))
 
   (GET "/about" [] 
        (about-page))

@@ -3,7 +3,9 @@
             [csound-notebook.db.core :as db]
             [compojure.core :refer [defroutes GET POST context]]
             [ring.util.http-response :as response]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [buddy.auth :refer [authenticated?]]
+            ))
 
 (def valid-chars
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
@@ -30,7 +32,12 @@
 
 (defn save-note 
   [req]
-  {:body {:note_id "12345678"}})
+  (let [p (:params req)]
+
+    )
+  {:body {:noteId "abc"}}
+  
+  )
 
 
 (defroutes note-routes

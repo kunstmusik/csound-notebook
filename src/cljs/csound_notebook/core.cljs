@@ -70,9 +70,30 @@
   ;(log (.-visible orc-ed))
   ;(log (.-visible sco-ed))
   )
-(defn handle-save [e]
-  (.replaceState js/history "" "Csound: Note abcdfeg" "abcdfeg")
+
+(defn update-url
+  [username note-id]
+  (log (str "Note Id: " note-id))
+  (.replaceState js/history "" "" (str "/" note-id))
   )
+
+(defn handle-save [e]
+
+  (let [orcEd (.getElementById js/document "csoundOrcEditor")
+        scoEd (.getElementById js/document "csoundScoEditor")
+        orc (.-value orcEd)
+        sco (.-value scoEd) 
+        note {:orc orc :sco sco} ] 
+    (POST "/" 
+        {:handler #(update-url nil (get % "noteId") )
+         :error-handler #(js/alert "Error: Unable to save note.")
+         :format :json
+         :response-format :json
+         :params note
+         }
+        ))  
+  )
+
 (defn handle-delete [e])
 
 
