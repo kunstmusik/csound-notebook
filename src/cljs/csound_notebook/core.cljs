@@ -153,9 +153,9 @@
 
 (defn home-page []
 
-  [:div.container-fluid.h-100.mr-auto.clearfix
+  [:div.container-fluid.h-100
 
-    [:ul.nav.nav-tabs.row-fluid
+    [:ul.nav.nav-tabs.row
      [:li.nav-item [:a.nav-link.active 
                     {:data-toggle "tab" :href "#orc" :role "tab" }  
                     "ORC"]]
@@ -167,17 +167,17 @@
                     "Console"]]
      ]
 
-   [:div.tab-content.w-100
-    {:style {:height "calc(100% - 104px)"}}
+   [:div.tab-content.row
+    {:style {:height "calc(100% - 100px)"}}
     ;[:pre  (with-out-str  (pprint @re-frame.db/app-db))]
     (when-let [n (rf/subscribe [:note]) ]
-      [:div.tab-pane.h-100.active {:id "orc" :role "tabpanel"} 
+      [:div.tab-pane.h-100.w-100.active {:id "orc" :role "tabpanel"} 
        [orc-editor @n]])
     (when-let [n (rf/subscribe [:note]) ]
-      [:div.tab-pane.h-100 {:id "sco" :role "tabpanel"}  
+      [:div.tab-pane.h-100.w-100 {:id "sco" :role "tabpanel"}  
        [sco-editor @n]])
 
-    [:div.tab-pane.h-100 {:id "console" :role "tabpanel"}  
+    [:div.tab-pane.h-100.w-100 {:id "console" :role "tabpanel"}  
      [:textarea.h-100
       {:id "console-text" :style {:width "100%"}}
       ]]
