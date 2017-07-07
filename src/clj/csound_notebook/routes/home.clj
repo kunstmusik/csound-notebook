@@ -35,16 +35,18 @@
 (defn save-note 
   [req]
   (if-let [p (:params req)]
-   (let [note-id (gen-note-id)]
+   (let [note-id (gen-note-id)
+         user (:identity (:session req))
+         user-id (:id user)
+         username (:username user)]
      (db/create-note! {:orc (:orc p)
                      :sco (:sco p)
                      :note-id note-id 
                      :is-live false
                      :is-public false
-                     :user-id nil  
+                     :user-id user-id  
                      })
-      {:body {:noteId note-id}}   
-     ) 
+      {:body {:username username :noteId note-id}}) 
    (:body {:error "Invalid Parameters."})))
 
 

@@ -17,6 +17,9 @@
 
 (defn log [s] (.log js/console s))
 
+;; store JQuery as jq
+(def jq (js* "$"))
+
 ;; ORC/SCO LIVE EVALUATION
 
 (defn eval-orc [orc]
@@ -31,15 +34,15 @@
 ;; HELP
 
 (defn show-help []
-  (js/alert "Help content not yet available."))
+  (.modal (jq "#helpModal") "show"))
 
 ;; CSD 
 
 (defn get-csd 
   ([] (get-csd false))
   ([process-score]
-  (let [orcEd (.getElementById js/document "csoundOrcEditor")
-        scoEd (.getElementById js/document "csoundScoEditor")
+  (let [orcEd (jq "#csoundOrcEditor")
+        scoEd (jq "#csoundScoEditor")
         orc (.-value orcEd)
         sco (if process-score (.-value scoEd) "")
         csd (str "<CsoundSynthesizer>\n<CsInstruments>\n"
@@ -65,36 +68,34 @@
     (cs/start-engine cs-obj (get-csd))))
 
 (defn handle-eval [e]
-  (let [orc-ed ((js* "$") "csoundOrcEditor")
-        sco-ed ((js* "$") "csoundScoEditor")])
+  (let [orc-ed (jq "#csoundOrcEditor")
+        sco-ed (jq "#csoundScoEditor")])
   ;(log (.-visible orc-ed))
   ;(log (.-visible sco-ed))
   )
 
 (defn update-url
   [username note-id]
-  (log (str "Note Id: " note-id))
-  (.replaceState js/history "" "" (str "/" note-id))
-  )
+  (if username
+    (.replaceState js/history "" "" (str "/" username "/" note-id))
+    (.replaceState js/history "" "" (str "/" note-id))))
 
 (defn handle-save [e]
-
-  (let [orcEd (.getElementById js/document "csoundOrcEditor")
-        scoEd (.getElementById js/document "csoundScoEditor")
+  (let [orcEd (jq "#csoundOrcEditor")
+        scoEd (jq "#csoundScoEditor")
         orc (.-value orcEd)
         sco (.-value scoEd) 
         note {:orc orc :sco sco} ] 
     (POST "/" 
-        {:handler #(update-url nil (get % "noteId") )
+        {:handler #(update-url (get % "username") (get % "noteId") )
          :error-handler #(js/alert "Error: Unable to save note.")
          :format :json
          :response-format :json
          :params note
          }
-        ))  
-  )
+        )))
 
-(defn handle-delete [e])
+;(defn handle-delete [e])
 
 
 ;; VIEWS
@@ -187,6 +188,10 @@
 
 (defn top-nav []
   [:ul.navbar-nav.mr-auto 
+  [:li.nav-item
+    [:a.nav-link {:href "/"} 
+     [:i.fa.fa-plus {:aria-hidden "true"}] " New"]]
+
    [:li.nav-item
     [:a.nav-link {:href "javascript:void(0);" :on-click handle-play}
      [:i.fa.fa-play {:aria-hidden "true"}] " Play"]]
@@ -237,7 +242,11 @@
 (defn mount-components []
   (rf/clear-subscription-cache!)
   (r/render [#'page] (.getElementById js/document "app"))
-  (r/render [#'top-nav] (.getElementById js/document "navbarNavAltMarkup")) 
+  (r/render [#'top-nav] (.getElementById js/document "navbarNavAltMarkup")))
+
+(defn load-note
+  []
+
   )
 
 (defn init! []
