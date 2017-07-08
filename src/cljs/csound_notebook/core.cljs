@@ -17,6 +17,9 @@
 
 (defn log [s] (.log js/console s))
 
+(defonce orcEditor (atom nil))
+(defonce scoEditor (atom nil))
+
 ;; store JQuery as jq
 (def jq (js* "$"))
 
@@ -41,10 +44,8 @@
 (defn get-csd 
   ([] (get-csd false))
   ([process-score]
-  (let [orcEd (jq "#csoundOrcEditor")
-        scoEd (jq "#csoundScoEditor")
-        orc (.-value orcEd)
-        sco (if process-score (.-value scoEd) "")
+  (let [orc (.getValue @orcEditor)
+        sco (if process-score (.getValue @scoEditor) "")
         csd (str "<CsoundSynthesizer>\n<CsInstruments>\n"
                  orc 
                  "\n</CsInstruments>\n<CsScore>\n"
@@ -81,10 +82,8 @@
     (.replaceState js/history "" "" (str "/" note-id))))
 
 (defn handle-save [e]
-  (let [orcEd (jq "#csoundOrcEditor")
-        scoEd (jq "#csoundScoEditor")
-        orc (.-value orcEd)
-        sco (.-value scoEd) 
+  (let [orc (.getValue @orcEditor)
+        sco (.getValue @scoEditor) 
         note {:orc orc :sco sco} ] 
     (POST "/" 
         {:handler #(update-url (get % "username") (get % "noteId") )
@@ -112,6 +111,7 @@
       (.setSize cm "100%" "100%")
       (.setOption cm "extraKeys"
                   (js-obj "Ctrl-E" #(eval-orc (.getSelection cm))))
+      (reset! orcEditor cm)
       ;(.on cm "change" #(reset! input  (.getValue %)))
       ))) 
 
@@ -135,6 +135,7 @@
       (.setSize cm "100%" "100%")
       (.setOption cm "extraKeys"
                   (js-obj "Ctrl-E" #(eval-sco (.getSelection cm))))
+      (reset! scoEditor cm)
       ;(.on cm "change" #(reset! input  (.getValue %)))
       ))) 
 

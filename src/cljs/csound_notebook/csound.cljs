@@ -1,4 +1,7 @@
-(ns csound-notebook.csound)
+(ns csound-notebook.csound
+ (:require
+    [goog.string :as gstring]
+    goog.string.format)) 
 
 (def csoundObj (atom nil))
 
@@ -39,8 +42,8 @@
         csoundObj 
         (reify CsoundEngine
           (start-engine [_ csd-text]
-            (.writeFile js/FS "/temp.csd" csd-text (js-obj {"encoding" "utf8"}))
-            (.compileCSD cs "/temp.csd")
+      (.log js/console (str "CSD TExt: " csd-text))
+            (.compileCSD cs csd-text)
             (.start cs))
           (stop-engine [_] (.stop cs))       
           (reset-engine [_] (.reset cs))       
@@ -50,9 +53,16 @@
   
   (.log js/console "Finished Loading Emscripten CsoundObj."))
 
+(defn load-csoundObj [version]
+  (js/setTimeout
+    #(load-script! (gstring/format "/%s/CsoundObj.js" version) finish-emscripten-load!)
+    4000))
+
 (defn load-emscripten! []
-  (.log js/console "Loading Emscripten CsoundObj...")
-  (load-script! "/javascripts/libcsound.js" finish-emscripten-load!))
+  (let [version (if (exists? js/WebAssembly) "wasm" "asmjs")]
+    (.log js/console (gstring/format "Loading %s CsoundObj..." version))
+    (load-script! (gstring/format "/%s/libcsound.js" version) 
+                  #(load-csoundObj version))))
 
 
 ;; PNACL
