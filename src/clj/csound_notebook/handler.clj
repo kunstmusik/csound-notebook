@@ -4,7 +4,6 @@
             [csound-notebook.routes.home :refer [home-routes]]
             [csound-notebook.routes.user :refer [user-routes]]
             [csound-notebook.routes.note :refer [note-routes]]
-            [csound-notebook.routes.notebook :refer [notebook-routes]]
             [compojure.route :as route]
             [csound-notebook.env :refer [defaults]]
             [mount.core :as mount]
@@ -17,8 +16,7 @@
 
 (def app-routes
   (routes
-    (-> (routes #'user-routes #'home-routes 
-                #'note-routes #'notebook-routes)
+    (-> (routes #'user-routes #'note-routes #'home-routes)
         (wrap-routes middleware/wrap-csrf)
         (wrap-routes middleware/wrap-formats))
     (route/not-found

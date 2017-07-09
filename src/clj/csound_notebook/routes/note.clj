@@ -7,54 +7,22 @@
             [buddy.auth :refer [authenticated?]]
             ))
 
-(def valid-chars
-  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-
-(def num-chars (.length valid-chars))
-
-(defn gen-note-id
-  "Generates string with 8 random alphanumeric characters."
-  []  
-  (str
-    (.charAt valid-chars (int (* num-chars (Math/random))))
-    (.charAt valid-chars (int (* num-chars (Math/random))))
-    (.charAt valid-chars (int (* num-chars (Math/random))))
-    (.charAt valid-chars (int (* num-chars (Math/random))))
-    (.charAt valid-chars (int (* num-chars (Math/random))))
-    (.charAt valid-chars (int (* num-chars (Math/random))))
-    (.charAt valid-chars (int (* num-chars (Math/random))))
-    (.charAt valid-chars (int (* num-chars (Math/random))))
-    ))
-
-(defn note-page 
-  [req]
-  (layout/render "note.html"))
-
-(defn save-note 
-  [req]
-  (let [p (:params req)]
-
-    )
-  {:body {:noteId "abc"}}
-  
-  )
+;; TODO - check if user is authenticated or that note is public
+(defn get-note 
+  [req username id]
+  (if-let [note 
+           (if username
+             (db/get-note-for-user {:username username :note-id id})
+             (db/get-note {:note-id id}))]
+    {:body note}
+    {:body {:error "Unable to access Csound note."}}))
 
 
 (defroutes note-routes
-  (context 
-    "/note" []
-
-    (GET "/" req 
-         (layout/render "note.html"))
-    (GET "/:id" req 
-         (layout/render "note.html"))
-    (GET "/:username/:id" req 
-         (layout/render "note.html"))
-    (POST "/" req
-          (save-note req))
-    (POST "/:id" req
-          (save-note req))
-    (POST "/:username/:id" req
-          (save-note req))
-    ))
+  (context "/note" []
+    (GET "/:id" [id :as req]  
+         (get-note req nil id))
+    (GET "/:username/:id" [username id :as req] 
+         (get-note req username id)))
+  )
   

@@ -25,8 +25,13 @@ WHERE id = :id
 -- :name get-note :? :1
 -- :doc retrieve a note give the noteId
 SELECT * from notes
-WHERE noteId = :noteId
+WHERE note_id = :note-id
 
+-- :name get-note-for-user :? :1
+-- :doc retrieve a note give the username and noteId
+SELECT * from notes
+WHERE note_id = :note-id
+AND user_id = (select id from users where username = :username) 
 
 -- :name create-note! :! :n
 -- :create a new note
