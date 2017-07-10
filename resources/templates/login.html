@@ -1,14 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-  <div class="row main">
-    <div class="panel-heading">
-      <div class="panel-title text-center">
-        <h1 class="title">Login</h1>
-        <hr />
-      </div>
-    </div> 
-    <div class="main-login main-center">
+<div class="card mt-4 mx-auto" style="width: 25rem">
+  <div class="card-header">
+    LOGIN 
+  </div>
+  <div class="card-block">
+    <div class="card-text">
       <form class="form-horizontal" method="post" action="#">
         {% csrf-field %}
         <div class="form-group">
