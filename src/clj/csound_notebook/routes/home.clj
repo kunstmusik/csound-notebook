@@ -32,6 +32,11 @@
   [req]
   (layout/render "note.html" {:logged-in (str (authenticated? req))}))
 
+(defn user-page
+  [req]
+
+  )
+
 (defn save-note 
   [req]
   (if-let [p (:params req)]

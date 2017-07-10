@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card mt-4">
+  <div class="card-header">
+    USERNAME: {{username|upper}}
+  </div>
+
+  {% for note in notes %}
+  <div class="card-block">
+    <h4 class="card-title">{{note.title}}</h4>
+    <p class="card-text">{{note.text}}</p>
+    <a href="/{{note.note-id}}" class="btn btn-primary">Open</a>
+  </div>
+  {% endfor %}
+</div> 
+{% endblock %}

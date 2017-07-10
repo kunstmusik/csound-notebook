@@ -47,6 +47,21 @@
       (-> (response/found "/")
           (assoc :session (assoc session :identity user))))))
 
+(defn user-page 
+  [username]
+  (if-let [user (db/get-user-by-username {:username username} )]
+    (layout/render "user.html" {:username username 
+                                :notes [{:title "Hi." :text "test."
+                                         :note-id "abcdefgh"
+                                         }
+                                        {:title "Hi 2." :text "test."
+                                         :note-id "abcdefgh"
+                                         }
+                                        ]}) 
+    (layout/render "user.html" {:error "Unknown User"})
+    )
+  )
+
 (defroutes user-routes
   (context 
     "/user" []
@@ -67,4 +82,8 @@
 
     (GET "/reset" []
          (reset-page))
+
+    (GET "/:user-id" [user-id :as req]
+         (user-page user-id) 
+         )
     ))
