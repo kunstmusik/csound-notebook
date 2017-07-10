@@ -26,13 +26,12 @@
 
 ;; EMSCRIPTEN CSOUND LOADING
 
-(defn- finish-emscripten-load! 
+(defn- finish-csound-load! 
   []
   (let [csout (.getElementById js/document "console-text") 
         append (fn [t] 
                  (aset csout "value" 
-                       (str (aget csout "value") t "\n")))
-        ]  
+                       (str (aget csout "value") t "\n")))]  
     (aset js/Module "print" append) 
     (aset js/Module "printErr" append))
  
@@ -42,7 +41,6 @@
         csoundObj 
         (reify CsoundEngine
           (start-engine [_ csd-text]
-      (.log js/console (str "CSD TExt: " csd-text))
             (.compileCSD cs csd-text)
             (.start cs))
           (stop-engine [_] (.stop cs))       
@@ -51,77 +49,20 @@
           (compile-sco [_ sco-text] (.readScore cs sco-text)))))  
    500) 
   
-  (.log js/console "Finished Loading Emscripten CsoundObj."))
+  (.log js/console "Finished Loading CsoundObj."))
 
 (defn load-csoundObj [version]
+  ;; TODO - need to figure out a way to get callback when module is loaded
+  ;; rather than use this timeout hack
   (js/setTimeout
-    #(load-script! (gstring/format "/%s/CsoundObj.js" version) finish-emscripten-load!)
+    #(load-script! (gstring/format "/%s/CsoundObj.js" version) finish-csound-load!)
     4000))
-
-(defn load-emscripten! []
-  (let [version (if (exists? js/WebAssembly) "wasm" "asmjs")]
-    (.log js/console (gstring/format "Loading %s CsoundObj..." version))
-    (load-script! (gstring/format "/%s/libcsound.js" version) 
-                  #(load-csoundObj version))))
-
-
-;; PNACL
-
-
-(defn create-module
-  []
-  (let [module (.createElement js/document "embed")] 
-    (.setAttribute module"name" "csound_module")
-    (.setAttribute module"id" "csound_module")
-    (.setAttribute module "path" "/Release")
-    (.setAttribute module "src" "/Release/csound.nmf")
-    (.setAttribute module "type" "application/x-pnacl")
-    (-> (.-body js/document)
-        (.appendChild module))
-    module))
-
-(def counter (atom 0))
-
-(defn progress-handler
-  [evt]
-  (if (and (aget evt "lengthComputable") 
-           (pos? (aget evt "total")))
-    (let [percent (* 100.0 (/ (aget evt "loaded") (aget evt "total")))]
-      (.log js/console (str "Loading: " percent " %")))
-    (.log js/console (str "Loading: (count=" (swap! counter inc) ")"))))
-
-
-(defn finish-pnacl [module]
-  (.log js/console "Finished Loading PNACL Csound.")
-  (reset! 
-      csoundObj
-      (reify CsoundEngine
-        (start-engine [_ csd-text]
-          (.postMessage module (str "csd:" csd-text)))
-        (stop-engine [_] (.log js/console "stop-engine not implemented"))       
-        (reset-engine [_] (.log js/console "reset-engine not implemented"))       
-        (compile-orc [_ orc-text] (.postMessage module (str "orchestra:" orc-text)))
-        (compile-sco [_ sco-text] (.postMessage module (str "score:" sco-text)))))
-  )
-
-(defn pnacl-message-handler 
-  [evt] 
-  (let [csout (.getElementById js/document "console-text")]  
-    (aset csout "value" 
-          (str (aget csout "value") (.-data evt)))))
-
-(defn load-pnacl!
-  []
-  (.log js/console "Loading PNACL Csound...")
-  (let [module (create-module)] 
-    (.addEventListener module "message" pnacl-message-handler true)
-    (.addEventListener module "progress" progress-handler true)
-    (.addEventListener module "load" (partial finish-pnacl module) true)))
 
 ;; LOAD CSOUND
 
 (defn load-csound! []
-  (if (aget js/navigator.mimeTypes "application/x-pnacl" )
-    (load-pnacl!) 
-    (load-emscripten!)))
+  (let [version (if (exists? js/WebAssembly) "wasm" "asmjs")]
+    (.log js/console (gstring/format "Loading %s CsoundObj..." version))
+    (load-script! (gstring/format "/%s/libcsound.js" version) 
+                  #(load-csoundObj version))))
 
