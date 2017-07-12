@@ -2,14 +2,17 @@
 {% block content %}
 <div class="card mt-4">
   <div class="card-header">
-    USERNAME: {{username|upper}}
+    USERNAME: {{username|upper}} 
+    {% if logged-in %}
+    <a href="/user/edit" class="btn btn-secondary btn-sm pull-right">Edit</a>
+    {% endif %}
   </div>
 
   {% for note in notes %}
   <div class="card-block">
     <h4 class="card-title">{{note.title}}</h4>
     <p class="card-text">{{note.text}}</p>
-    <a href="/{{note.note-id}}" class="btn btn-primary">Open</a>
+    <a href="/{{username}}/{{note.note_id}}" class="btn btn-primary btn-sm">Open</a>
   </div>
   {% endfor %}
 </div> 

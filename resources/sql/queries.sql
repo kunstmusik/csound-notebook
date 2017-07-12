@@ -39,8 +39,21 @@ WHERE note_id = :note-id
 AND user_id = (select id from users where username = :username) 
 
 -- :name create-note! :! :n
--- :create a new note
+-- :doc create a new note
 INSERT INTO notes
 (orc, sco, note_id, is_live, is_public, user_id)
 VALUES
 (:orc, :sco, :note-id, :is-live, :is-public, :user-id)
+
+-- :name get-notes-for-username :? :*
+-- :doc get all notes for username
+SELECT * from notes
+WHERE user_id = (select id from users where username = :username)
+
+
+-- :name get-public-notes-for-username :? :*
+-- :doc get public notes for username
+SELECT * from notes
+WHERE user_id = (select id from users where username = :username)
+AND is_public = 1
+

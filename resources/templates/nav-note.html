@@ -15,12 +15,8 @@
 
       <!-- LINKS -->
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div id="navigation"></div>
+        {% include "userbox.html" %}
       </div>
 
-      {% if logged-in %}
-
-      <a class="nav-item navbar-text" href="/user/logout">Logout</a>
-      {% else %}
-      <a class="nav-item navbar-text" href="/user/login">Login</a>
-      {% endif %}
     </nav>

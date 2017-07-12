@@ -18,8 +18,10 @@
     (response/found "/")
     (layout/render "login.html")))
 
-(defn reset-page []
-  (layout/render "reset.html"))
+(defn reset-page [req]
+  (if (authenticated? req)
+    (response/found "/")
+    (layout/render "reset.html")))
 
 
 (defn handle-login [{:keys [session form-params] :as req}]
@@ -41,26 +43,38 @@
     (layout/render "register.html")
     (let [user {:email (form-params "email")
                 :pass (hashers/encrypt (form-params "password"))
-                :username (form-params "username")
+                :identity (form-params "username")
                 }]
       (db/create-user! user)
       (-> (response/found "/")
           (assoc :session (assoc session :identity user))))))
 
 (defn user-page 
-  [username]
+  [req username]
   (if-let [user (db/get-user-by-username {:username username} )]
-    (layout/render "user.html" {:username username 
-                                :notes [{:title "Hi." :text "test."
-                                         :note-id "abcdefgh"
-                                         }
-                                        {:title "Hi 2." :text "test."
-                                         :note-id "abcdefgh"
-                                         }
-                                        ]}) 
-    (layout/render "user.html" {:error "Unknown User"})
-    )
-  )
+    (let [editable (and (authenticated? req) 
+                        (= username
+                           (get-in req [:session :identity :username] false)))
+          notes (if editable 
+                  (db/get-notes-for-username {:username username})
+                  (db/get-public-notes-for-username {:username username}))]
+      (println notes)
+      (layout/render "user.html" {:username username 
+                                  :editable editable 
+                                  :notes notes
+                                  :logged-in (str (authenticated? req))
+                                  :identity (get-in req
+                                                [:session :identity :username]
+                                                "user") 
+                                  }))
+    (layout/render "user.html" {:username "Unknown User"
+                                :notes []
+                                :editable false
+                                :logged-in (str (authenticated? req))
+                                :identity (get-in req
+                                                [:session :identity :username]
+                                                "user") 
+                                })))
 
 (defroutes user-routes
   (context 
@@ -80,10 +94,10 @@
     (POST "/register" req
           (handle-register req))
 
-    (GET "/reset" []
-         (reset-page))
+    (GET "/reset" req 
+         (reset-page req))
 
     (GET "/:user-id" [user-id :as req]
-         (user-page user-id) 
+         (user-page req user-id) 
          )
     ))

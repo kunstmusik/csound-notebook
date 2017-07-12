@@ -30,7 +30,10 @@
 
 (defn note-page 
   [req]
-  (layout/render "note.html" {:logged-in (str (authenticated? req))}))
+  (layout/render "note.html" {:logged-in (str (authenticated? req))
+                              :identity (get-in req
+                                                [:session :identity :username]
+                                                "user")}))
 
 (defn user-page
   [req]

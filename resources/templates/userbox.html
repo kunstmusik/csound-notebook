@@ -1,0 +1,21 @@
+
+      {% if logged-in %}
+
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="userboxLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+            <i class="fa fa-user-circle" aria-hidden="true"></i> {{identity}} 
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userboxLink">
+            <a class="dropdown-item" href="/user/{{identity}}">My Notes</a>
+            <a class="dropdown-item" href="/user/logout">Logout</a>
+          </div>
+        </li>
+      </ul>
+      {% else %}
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/user/login">Login</a>
+        </li>
+      </ul>
+      {% endif %}

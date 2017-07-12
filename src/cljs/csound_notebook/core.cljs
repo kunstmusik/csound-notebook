@@ -243,7 +243,7 @@
 (defn mount-components []
   (rf/clear-subscription-cache!)
   (r/render [#'page] (.getElementById js/document "app"))
-  (r/render [#'top-nav] (.getElementById js/document "navbarNavAltMarkup")))
+  (r/render [#'top-nav] (.getElementById js/document "navigation")))
 
 (defn load-note
   []
