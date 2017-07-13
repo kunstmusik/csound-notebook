@@ -1,7 +1,7 @@
 (defproject csound-notebook "0.1.0-SNAPSHOT"
 
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+  :description "Csound Notebook"
+  :url "https://github.com/kunstmusik/csound-notebook"
 
   :dependencies [[buddy "1.3.0"]
                  [ch.qos.logback/logback-classic "1.1.7"]
@@ -26,7 +26,7 @@
                  [org.webjars.bower/tether "1.4.0"]
                  [org.webjars/bootstrap "4.0.0-alpha.6-1"]
                  [org.webjars/font-awesome "4.7.0"]
-                 [org.webjars.bower/codemirror "5.25.0"]
+                 [org.webjars.npm/codemirror "5.27.4"]
                  [re-frame "0.9.3"]
                  [reagent "0.6.1"]
                  [reagent-utils "0.2.1"]
