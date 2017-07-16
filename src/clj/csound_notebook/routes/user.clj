@@ -6,22 +6,48 @@
             [clojure.java.io :as io]
             [buddy.hashers :as hashers]
             [buddy.auth :refer [authenticated?]]
+            [postal.core :refer [send-message]]
             ))
 
-(defn register-page [req]
-  (if (authenticated? req)
-    (response/found "/")
-    (layout/render "register.html")))
+(def EMAIL-BASE
+  {:from "noreply@csound-notebook.kunstmusik.com"
+   :subject "Csound Notebook - Password Reset"
+   :body "Please visit link to reset your password."
+   })
 
-(defn login-page [req]
+(defn register-page [{:keys [flash] :as req}]
   (if (authenticated? req)
     (response/found "/")
-    (layout/render "login.html")))
+    (layout/render "register.html"
+                   (select-keys flash [:alert-message])
+                   )))
+
+(defn login-page [{:keys [flash] :as req}]
+  (if (authenticated? req)
+    (response/found "/")
+    (layout/render "login.html"
+                   (select-keys flash [:alert-message])
+                   )))
 
 (defn reset-page [req]
   (if (authenticated? req)
     (response/found "/")
     (layout/render "reset.html")))
+
+
+(defn handle-reset [req]
+  (if (authenticated? req)
+    (response/found "/")
+    (do
+      (send-message {:to [(get-in req [:form-params :email])] 
+                     :from "noreply@csound-notebook.kunstmusik.com"
+                     :subject "Password Reset"
+                     :body "Email reset code."
+                     })
+      (->
+        (response/found "/user/login")
+        (assoc :flash {:alert-message "Please check your email."})
+        ))))
 
 
 (defn handle-login [{:keys [session form-params] :as req}]
@@ -96,6 +122,9 @@
 
     (GET "/reset" req 
          (reset-page req))
+
+    (POST "/reset" req 
+         (handle-reset req))
 
     (GET "/:user-id" [user-id :as req]
          (user-page req user-id) 
