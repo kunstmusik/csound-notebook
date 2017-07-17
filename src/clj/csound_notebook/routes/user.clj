@@ -31,22 +31,28 @@
 
 (defn reset-page [req]
   (if (authenticated? req)
-    (response/found "/")
+    (->
+      (response/found "/"))
     (layout/render "reset.html")))
 
 
-(defn handle-reset [req]
+(defn handle-reset [{:keys [form-params] :as req}]
   (if (authenticated? req)
     (response/found "/")
-    (do
-      (send-message {:to [(get-in req [:form-params :email])] 
-                     :from "noreply@csound-notebook.kunstmusik.com"
-                     :subject "Password Reset"
-                     :body "Email reset code."
-                     })
+    (if-let [user (db/get-user {:email (form-params "email")})]
+      (do
+        (send-message 
+          {:to [(form-params "email")] 
+                       :from "noreply@csound-notebook.kunstmusik.com"
+                       :subject "Password Reset"
+                       :body "Email reset code."
+                       })
+        (->
+          (response/found "/user/login")
+          (assoc :flash {:alert-message "Please check your email."})))
       (->
-        (response/found "/user/login")
-        (assoc :flash {:alert-message "Please check your email."})
+        (layout/render "reset.html"
+                       {:alert-message "Error: no account found with that email."})
         ))))
 
 
@@ -66,10 +72,13 @@
 ;; TODO - validation
 (defn handle-register [{:keys [session form-params] :as req}]
   (if-let [user (db/get-user {:email (form-params "email")})]
-    (layout/render "register.html")
+    (layout/render "register.html" 
+                   {:alert-message 
+                    "Error: There is a user already registered with 
+                    that email address."})
     (let [user {:email (form-params "email")
                 :pass (hashers/encrypt (form-params "password"))
-                :identity (form-params "username")
+                :username (form-params "username")
                 }]
       (db/create-user! user)
       (-> (response/found "/")
@@ -84,7 +93,6 @@
           notes (if editable 
                   (db/get-notes-for-username {:username username})
                   (db/get-public-notes-for-username {:username username}))]
-      (println notes)
       (layout/render "user.html" {:username username 
                                   :editable editable 
                                   :notes notes
