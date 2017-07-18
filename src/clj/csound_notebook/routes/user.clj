@@ -1,6 +1,7 @@
 (ns csound-notebook.routes.user
   (:require [csound-notebook.layout :as layout]
             [csound-notebook.db.core :as db]
+            [csound-notebook.config :refer [env]]
             [compojure.core :refer [defroutes GET POST context]]
             [ring.util.http-response :as response]
             [clojure.java.io :as io]
@@ -35,18 +36,22 @@
       (response/found "/"))
     (layout/render "reset.html")))
 
+(defn send-reset-email! [email]
+  (when-let [smtp (env :smtp)] 
+    (send-message 
+      smtp
+      {:to email 
+       :from "noreply@csound-notebook.kunstmusik.com"
+       :subject "Password Reset"
+       :body "Email reset code."
+       })))
 
 (defn handle-reset [{:keys [form-params] :as req}]
   (if (authenticated? req)
     (response/found "/")
     (if-let [user (db/get-user {:email (form-params "email")})]
       (do
-        (send-message 
-          {:to [(form-params "email")] 
-                       :from "noreply@csound-notebook.kunstmusik.com"
-                       :subject "Password Reset"
-                       :body "Email reset code."
-                       })
+        (send-reset-email! (form-params "email")) 
         (->
           (response/found "/user/login")
           (assoc :flash {:alert-message "Please check your email."})))
