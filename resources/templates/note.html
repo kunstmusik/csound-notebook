@@ -26,6 +26,7 @@
     {% style "/assets/font-awesome/css/font-awesome.min.css" %}
     {% style "/css/screen.css" %}
     {% style "/assets/codemirror/lib/codemirror.css" %}
+    {% style "/assets/codemirror/theme/monokai.css" %}
 
     <script type="text/javascript">
         var context = "{{servlet-context}}";
@@ -37,6 +38,9 @@
     {% script "/assets/tether/dist/js/tether.min.js" %}
     {% script "/assets/bootstrap/js/bootstrap.min.js" %}
     {% script "/assets/codemirror/lib/codemirror.js" %}
+    {% script "/mode/csound/csound.js" %}
+    {% script "/assets/codemirror/addon/edit/matchbrackets.js" %}
+    {% script "/assets/codemirror/addon/edit/closebrackets.js" %}
     {% script "/assets/codemirror/addon/display/autorefresh.js" %}
     {% script "/javascripts/Blob.js" %}
     {% script "/javascripts/FileSaver.js" %}

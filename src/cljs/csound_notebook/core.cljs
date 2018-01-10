@@ -103,10 +103,11 @@
   (fn  [this]
     (let  [cm  (.fromTextArea  js/CodeMirror
                               (r/dom-node this)
-                              #js  {:mode "javascript"
+                              #js  {:mode "csound"
                                     :lineNumbers true
                                     :autofocus false 
                                     :autoRefresh true
+                                    :theme "monokai"
                                     })]
       (.setSize cm "100%" "100%")
       (.setOption cm "extraKeys"
@@ -127,10 +128,11 @@
   (fn  [this]
     (let  [cm  (.fromTextArea  js/CodeMirror
                               (r/dom-node this)
-                              #js  {:mode "javascript"
+                              #js  {:mode "csound"
                                     :lineNumbers true
                                     :autofocus false 
                                     :autoRefresh true
+                                    :theme "monokai"
                                     })]
       (.setSize cm "100%" "100%")
       (.setOption cm "extraKeys"

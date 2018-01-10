@@ -11,3 +11,4 @@ profiles.clj
 .nrepl-port
 /log
 figwheel_server.log
+deploy.sh
